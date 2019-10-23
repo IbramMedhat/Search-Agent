@@ -25,7 +25,7 @@ public class EndGameProblem extends Problem  {
 	}
 
 	@Override
-	public int pathCost(String operators) {
+	public int pathCost(Node currentNode, char operator) {
 		// TODO calculating the path cost
 		return 0;
 	}
