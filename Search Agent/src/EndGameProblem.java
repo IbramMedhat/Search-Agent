@@ -1,9 +1,7 @@
 
 public class EndGameProblem extends Problem  {
 	private String grid;
-	private String warriorsPositions;
-	private String stonesPositions;
-	private String thanosPosition;
+	
 	private EndGameGrid endGameGrid;
 	
 	public EndGameProblem(String grid) {
@@ -11,10 +9,6 @@ public class EndGameProblem extends Problem  {
 		this.grid = grid;
 		
 		// Parsing the grid to get warriors, stones and Thanos positions
-		String[] gridSplitted = grid.split(";");
-		this.warriorsPositions = String.join("", gridSplitted[4]);
-		this.stonesPositions = String.join("", gridSplitted[3]);
-		this.thanosPosition = String.join("", gridSplitted[2]);
 		
 		// Denoting endgame operators Up, Down, Left, Right, Collect, Kill and Snap
 		this.setOperators("UDLRCKS");
@@ -30,39 +24,59 @@ public class EndGameProblem extends Problem  {
 	public State transitionFunction(State currentState, char operator) {
 		EndGameState currentEndState = (EndGameState) currentState; 
 		Vector2 currentIronManPos = currentEndState.getIronManPos();
+		Vector2 nextIronManPos = currentIronManPos;
 		boolean snaped = currentEndState.isSnaped();
 		boolean[] killed = currentEndState.getKilled();
 		boolean[] stonesCollected = currentEndState.getStonesCollected();
+		// Applying transition function according to different operators
 		switch(operator) {
 			case 'U' : 
 				// Checking if moving would cause outofBound
 				if(endGameGrid.isCellEmpty(currentIronManPos.Up(), currentEndState)) {
-					
+					nextIronManPos = currentIronManPos.Up();
 				}
 				break;
 			case 'D' :
 				// Checking if moving would cause outofBound
 				if(endGameGrid.isCellEmpty(currentIronManPos.Down(), currentEndState)) {
-					
+					nextIronManPos = currentIronManPos.Down();
 				}
 				break;
 			case 'L' :
 				// Checking if moving would cause outofBound
 				if(endGameGrid.isCellEmpty(currentIronManPos.Left(), currentEndState)) {
-					
+					nextIronManPos = currentIronManPos.Left();
 				}
 				break;
 			case 'R' :
 				if(endGameGrid.isCellEmpty(currentIronManPos.Right(), currentEndState)) {
-					
+					nextIronManPos = currentIronManPos.Right();
 				}
 				break;
-			case 'C' : //TODO Collect operator transition
-			case 'K' : //TODO Kill operator transition
-			case 'S' : //TODO Snap operator transition
-					
+			case 'C' : 
+				// Check if there is stone in the current ironman position
+				if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.STONE, currentEndState)) {
+					stonesCollected[endGameGrid.getEndGameCell(currentIronManPos).getContentIndex()] = true;
+				}
+			case 'K' : 
+				if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.WARRIOR, currentEndState)) {
+					killed[endGameGrid.getEndGameCell(currentIronManPos).getContentIndex()] = true;
+				}
+			case 'S' : 
+				boolean allCollected = true;
+				for(int i = 0; i < stonesCollected.length; i++) {
+					if(!stonesCollected[i]) {
+						allCollected = false;
+						break;
+					}
+				}
+				if(allCollected) {
+					// Checking if all stones are collected and thanos is in the same cell as ironman
+					if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.THANOS, currentEndState))
+						snaped = true;
+				}
 		}
-		return null;
+		return new EndGameState(nextIronManPos, killed, stonesCollected, snaped);
 	}
 	
 //	private boolean nextCellFree(int intendedPositionX, int intendedPositionY, boolean[] killedWarriors) {
@@ -88,7 +102,10 @@ public class EndGameProblem extends Problem  {
 
 	@Override
 	public boolean goalTest(State currentState) {
-		// TODO Adding goal test to check if snapped action occurred or not
+		EndGameState currentEndState = (EndGameState) currentState;
+		if(currentEndState.isSnaped()) {
+			return true;
+		}
 		return false;
 	}
 
@@ -103,9 +120,11 @@ public class EndGameProblem extends Problem  {
 		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Right(), newEndGameState).getCellDamage();
 		
 		
-		//TODO add the cost of the Operator
-		
-		return 0;
+		switch(operator) {
+			case 'C' : totalDamage += 3;break;
+			case 'K' : totalDamage += 2;break;
+		}
+		return totalDamage;
 	}
 
 }

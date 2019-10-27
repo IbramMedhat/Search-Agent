@@ -105,8 +105,18 @@ public class Main {
 	}
 	
 	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
+		int[] nodesPathcost = new int[problem.getOperators().length()];
 		for(int i = 0;i < problem.getOperators().length(); i++) {
-			//TODO
+			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
+			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
+			nodesPathcost[i] = problem.pathCost(nextState, operator);
+			// Creating the new node and adding it to the end of the queue
+			// Changing the path cost function to take current node and current operator
+			toBeExpandedQueueDT.add(new Node(nextState, 
+											currentNode, 
+											operator,
+											currentNode.getDepth() + 1,
+											problem.pathCost(nextState, operator)));
 		}
 	}
 	

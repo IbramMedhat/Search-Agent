@@ -7,19 +7,33 @@ public class EndGameState extends State {
 	private boolean[] stonesCollected; 
 	
 	public EndGameState(int ironManX, int ironManY, boolean snaped, int numOfWarriors, int numOfInfintyStones) {
-		this(new Vector2(ironManX, ironManY), snaped, numOfWarriors, numOfInfintyStones);
+		//this(new Vector2(ironManX, ironManY), snaped, numOfWarriors, numOfInfintyStones);
 	}
 	
+	public EndGameState(Vector2 ironManPos, boolean snaped, boolean[] killed, boolean[] stonesCollected) {
+		super();
+		this.ironManPos = ironManPos;
+		this.stonesCollected = stonesCollected;
+		this.snaped = snaped;
+		this.killed = killed;
+	}
+	
+	public EndGameState(Vector2 ironManPos, boolean[] killed, boolean[] stonesCollected, boolean snaped) {
+		this(ironManPos, snaped, killed, stonesCollected);
+	}
+	
+	public EndGameState(int x, int y, boolean snaped) {
+		this(new Vector2(x, y), snaped);
+	}
+	public EndGameState(Vector2 ironManPos, boolean snaped) {
+		this(ironManPos, snaped, 5, 6);
+	}
 	public EndGameState(Vector2 ironManPos, boolean snaped, int numOfWarriors, int numOfInfintyStones) {
 		super();
 		this.ironManPos = ironManPos;
-		this.stonesCollected = new boolean[numOfInfintyStones];
 		this.snaped = snaped;
+		this.stonesCollected = new boolean[numOfInfintyStones];
 		this.killed = new boolean[numOfWarriors];
-	}
-	
-	public EndGameState(int ironManX, int ironManY, boolean snaped) {
-		this(ironManX, ironManY, snaped, 5, 6);
 	}
 
 	public int getIronManX() {

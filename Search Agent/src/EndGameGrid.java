@@ -111,6 +111,9 @@ public class EndGameGrid {
 			return EndGameCellType.OUTOFBOUND;
 		}
 	}
+	public EndGameCell getEndGameCell(Vector2 pos) {
+		return gridCells[pos.x][pos.y];
+	}
 	
 	public boolean isCellEmpty(Vector2 pos, EndGameState currentState)
 	{
