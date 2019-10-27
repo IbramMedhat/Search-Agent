@@ -29,32 +29,31 @@ public class EndGameProblem extends Problem  {
 	@Override
 	public State transitionFunction(State currentState, char operator) {
 		EndGameState currentEndState = (EndGameState) currentState; 
-		Vector2 nextIronManPos = currentEndState.getIronManPos();
-		int nextIronManY = currentEndState.getIronManY();
+		Vector2 currentIronManPos = currentEndState.getIronManPos();
 		boolean snaped = currentEndState.isSnaped();
 		boolean[] killed = currentEndState.getKilled();
 		boolean[] stonesCollected = currentEndState.getStonesCollected();
 		switch(operator) {
 			case 'U' : 
 				// Checking if moving would cause outofBound
-				if(endGameGrid.isCellEmpty(nextIronManPos.Up(), currentEndState)) {
+				if(endGameGrid.isCellEmpty(currentIronManPos.Up(), currentEndState)) {
 					
 				}
 				break;
 			case 'D' :
 				// Checking if moving would cause outofBound
-				if(endGameGrid.isCellEmpty(nextIronManPos.Down(), currentEndState)) {
+				if(endGameGrid.isCellEmpty(currentIronManPos.Down(), currentEndState)) {
 					
 				}
 				break;
 			case 'L' :
 				// Checking if moving would cause outofBound
-				if(endGameGrid.isCellEmpty(nextIronManPos.Left(), currentEndState)) {
+				if(endGameGrid.isCellEmpty(currentIronManPos.Left(), currentEndState)) {
 					
 				}
 				break;
 			case 'R' :
-				if(endGameGrid.isCellEmpty(nextIronManPos.Right(), currentEndState)) {
+				if(endGameGrid.isCellEmpty(currentIronManPos.Right(), currentEndState)) {
 					
 				}
 				break;
