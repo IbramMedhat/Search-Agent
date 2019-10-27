@@ -43,7 +43,7 @@ public class Main {
 	
 	public static Node generalSearch(Problem problem, String queueingFunction) {
 		
-		QueueDT toBeExpandedNodes = new QueueDT();
+		QueueDT<Node> toBeExpandedNodes = new QueueDT<Node>();
 		//TODO choosing between different queueing functions
 		
 		//enqueue initial state before starting the expanding process
@@ -59,7 +59,7 @@ public class Main {
 		
 	}
 	
-	public static void expand(QueueDT toBeExpandedQueueDT, Node currentNode, Problem problem, String queueingFunction){
+	public static void expand(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem, String queueingFunction){
 		EndGameState currentState = (EndGameState) currentNode.getCurrentState();
 		
 		switch (queueingFunction) {	
@@ -76,13 +76,13 @@ public class Main {
 		
 	}
 
-	public static void enqueueAtFront(QueueDT toBeExpandedQueueDT, Node currentNode, Problem problem) {
+	public static void enqueueAtFront(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
 		for(int i = 0;i < problem.getOperators().length(); i++) {
 			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
 			EndGameState currentState = (EndGameState) currentNode.getCurrentState(); //getting the current expanded state 
 			EndGameState nextState = (EndGameState) problem.transitionFunction(currentState, operator);
 			
-			// Creating the new node and adding it to the queue
+			// Creating the new node and adding it to the front of the queue
 			// Changing the path cost function to take current node and current operator
 			toBeExpandedQueueDT.addFirst(new Node(nextState, 
 											currentNode, 
@@ -92,13 +92,23 @@ public class Main {
 		}
 	}
 	
-	public static void enqueueAtEnd(QueueDT toBeExpandedQueueDT, Node currentNode, Problem problem) {
+	public static void enqueueAtEnd(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
 		for(int i = 0;i < problem.getOperators().length(); i++) {
-			//TODO
+			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
+			EndGameState currentState = (EndGameState) currentNode.getCurrentState(); //getting the current expanded state 
+			EndGameState nextState = (EndGameState) problem.transitionFunction(currentState, operator);
+			
+			// Creating the new node and adding it to the end of the queue
+			// Changing the path cost function to take current node and current operator
+			toBeExpandedQueueDT.add(new Node(nextState, 
+											currentNode, 
+											operator,
+											currentNode.getDepth() + 1,
+											problem.pathCost(currentNode, operator)));
 		}
 	}
 	
-	public static void orderedInsert(QueueDT toBeExpandedQueueDT, Node currentNode, Problem problem) {
+	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
 		for(int i = 0;i < problem.getOperators().length(); i++) {
 			//TODO
 		}
