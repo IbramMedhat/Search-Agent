@@ -1,29 +1,28 @@
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
 
-public class QueueDT implements Queue{
-
+public class QueueDT<E> implements Queue{
+	
+	LinkedList<E> queue;
 	public QueueDT() {
-		// TODO Auto-generated constructor stub
+		this.queue = new LinkedList<E>();
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return queue.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return queue.isEmpty();
 	}
 
 	@Override
 	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return queue.contains(o);
 	}
 
 	@Override
@@ -83,13 +82,17 @@ public class QueueDT implements Queue{
 	@Override
 	public boolean add(Object e) {
 		// TODO Auto-generated method stub
-		return false;
+		return queue.add((E)e);
 	}
 
 	@Override
 	public boolean offer(Object e) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	public void addFirst(Object e) {
+		queue.offerFirst((E)e);
 	}
 
 	@Override
@@ -100,8 +103,7 @@ public class QueueDT implements Queue{
 
 	@Override
 	public Object poll() {
-		// TODO Auto-generated method stub
-		return null;
+		return queue.removeFirst();
 	}
 
 	@Override
@@ -112,8 +114,7 @@ public class QueueDT implements Queue{
 
 	@Override
 	public Object peek() {
-		// TODO Auto-generated method stub
-		return null;
+		return queue.getFirst();
 	}
 
 }
