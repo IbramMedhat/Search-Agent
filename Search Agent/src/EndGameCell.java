@@ -1,17 +1,32 @@
 
-public enum EndGameCell {
-	EMPTY(' '),WARRIOR('W'),THANOS('T'),IRONMAN('I'),STONE('S');
+public class EndGameCell {
+
+	private EndGameCellType content;
+	private int contentIndex;
 	
-	
-	private char cellChar;
-	
-	EndGameCell(char e)
+	public EndGameCell()
 	{
-		this.cellChar = e;
+		content = EndGameCellType.EMPTY;
+		contentIndex = 0;
 	}
 	
-	public char getCellChar()
+	public void setCellContent(EndGameCellType object, int index)
 	{
-		return cellChar;
+		this.content = object;
+		this.contentIndex = index;
 	}
+
+	public int getContentIndex() {
+		return contentIndex;
+	}
+
+	public void setContentIndex(int contentIndex) {
+		this.contentIndex = contentIndex;
+	}
+
+	public EndGameCellType getContent() {
+		return content;
+	}
+	
+	
 }
