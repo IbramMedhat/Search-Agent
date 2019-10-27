@@ -1,12 +1,23 @@
 
 public class EndGameProblem extends Problem  {
 	private String grid;
-	
+	private String warriorsPositions;
+	private String stonesPositions;
+	private String thanosPosition;
 	
 	public EndGameProblem(String grid) {
 		super();
 		this.grid = grid;
+		
+		// Parsing the grid to get warriors, stones and Thanos positions
+		String[] gridSplitted = grid.split(";");
+		this.warriorsPositions = String.join("", gridSplitted[4]);
+		this.stonesPositions = String.join("", gridSplitted[3]);
+		this.thanosPosition = String.join("", gridSplitted[2]);
+		
+		// Denoting endgame operators Up, Down, Left, Right, Collect, Kill and Snap
 		this.setOperators("UDLRCKS");
+		
 	}
 
 	public String getGrid() {
