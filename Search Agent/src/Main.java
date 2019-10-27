@@ -85,7 +85,7 @@ public class Main {
 											currentNode, 
 											operator,
 											currentNode.getDepth() + 1,
-											problem.pathCost(currentNode, operator)));
+											problem.pathCost(nextState, operator)));
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class Main {
 											currentNode, 
 											operator,
 											currentNode.getDepth() + 1,
-											problem.pathCost(currentNode, operator)));
+											problem.pathCost(nextState, operator)));
 		}
 	}
 	

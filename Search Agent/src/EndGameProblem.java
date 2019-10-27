@@ -88,7 +88,7 @@ public class EndGameProblem extends Problem  {
 		
 		// Check if thanos is in the target cell of the operator
 		if(intendedPositionX == Character.getNumericValue(thanosPosition.charAt(0))
-		&& intendedPositionY == Character.getNumericValue(thanosPosition.charAt (1)))
+		&& intendedPositionY == Character.getNumericValue(thanosPosition.charAt(1)))
 			return false;
 	
 		return true;
@@ -101,7 +101,7 @@ public class EndGameProblem extends Problem  {
 	}
 
 	@Override
-	public int pathCost(Node currentNode, char operator) {
+	public int pathCost(State currentState, char operator) {
 		// TODO calculating the path cost
 		
 		return 0;
