@@ -27,31 +27,71 @@ public class EndGameProblem extends Problem  {
 	@Override
 	public State transitionFunction(State currentState, char operator) {
 		EndGameState currentEndState = (EndGameState) currentState; 
-		int nextIronManX;
-		int nextIronManY;
-		boolean snapped;
-		int numOfWarriors;
-		int numOfInfinityStones;
+		int nextIronManX = currentEndState.getIronManX();
+		int nextIronManY = currentEndState.getIronManY();
+		boolean snaped = currentEndState.isSnaped();
+		boolean[] killed = currentEndState.getKilled();
+		boolean[] stonesCollected = currentEndState.getStonesCollected();
 		switch(operator) {
 			case 'U' : 
-				if(currentEndState.getIronManX() > 0)
-					nextIronManX = currentEndState.getIronManX() - 1;
+				// Checking if moving would cause outofBound
+				if(currentEndState.getIronManX() > 0) {
+					// Checking if next cell is free
+					if(nextCellFree(currentEndState.getIronManX() - 1, currentEndState.getIronManY(), 
+							currentEndState.getKilled()))
+						nextIronManX = currentEndState.getIronManX() - 1;
+				}
 			case 'D' :
-				if(currentEndState.getIronManX() < 4)
+				// Checking if moving would cause outofBound
+				if(currentEndState.getIronManX() < 4) {
+					// Checking if next cell is free
+					if(nextCellFree(currentEndState.getIronManX() + 1, currentEndState.getIronManY(), 
+						currentEndState.getKilled()))
 					nextIronManX = currentEndState.getIronManX() + 1;
+				}
 			case 'L' :
-				if(currentEndState.getIronManY() > 0)
+				// Checking if moving would cause outofBound
+				if(currentEndState.getIronManY() > 0){
+					// Checking if next cell is free
+					if(nextCellFree(currentEndState.getIronManX(), currentEndState.getIronManY() - 1, 
+						currentEndState.getKilled()))
 					nextIronManX = currentEndState.getIronManY() - 1;
+				}
 			case 'R' :
-				if(currentEndState.getIronManY() < 4)
+				// Checking if moving would cause outofBound
+				if(currentEndState.getIronManY() < 4){
+					// Checking if next cell is free
+					if(nextCellFree(currentEndState.getIronManX(), currentEndState.getIronManY() + 1, 
+						currentEndState.getKilled()))
 					nextIronManX = currentEndState.getIronManY() + 1;
-			case 'C' :
-			case 'K' :
-			case 'S' :
+				}
+			case 'C' : //TODO Collect operator transition
+			case 'K' : //TODO Kill operator transition
+			case 'S' : //TODO Snap operator transition
 					
 		}
-		// TODO Adding transition function utilizing the grid instance variable
 		return null;
+	}
+	
+	private boolean nextCellFree(int intendedPositionX, int intendedPositionY, boolean[] killedWarriors) {
+		boolean warriorFound = false;
+		boolean thanosFound = false;
+		
+		// Check if warrior is in the target cell of the operator
+		for(int i = 0; i < warriorsPositions.length(); i+=2) {
+			if(intendedPositionX == Character.getNumericValue(warriorsPositions.charAt(i))
+			&& intendedPositionY == Character.getNumericValue(warriorsPositions.charAt (i + 1))
+			&& !killedWarriors[i / 2]) {
+				return false;
+			}
+		}
+		
+		// Check if thanos is in the target cell of the operator
+		if(intendedPositionX == Character.getNumericValue(thanosPosition.charAt(0))
+		&& intendedPositionY == Character.getNumericValue(thanosPosition.charAt (1)))
+			return false;
+	
+		return true;
 	}
 
 	@Override
