@@ -4,6 +4,7 @@ public class EndGameProblem extends Problem  {
 	private String warriorsPositions;
 	private String stonesPositions;
 	private String thanosPosition;
+	private EndGameGrid endGameGrid;
 	
 	public EndGameProblem(String grid) {
 		super();
@@ -17,6 +18,7 @@ public class EndGameProblem extends Problem  {
 		
 		// Denoting endgame operators Up, Down, Left, Right, Collect, Kill and Snap
 		this.setOperators("UDLRCKS");
+		this.endGameGrid = new EndGameGrid(grid);
 		
 	}
 
@@ -27,7 +29,7 @@ public class EndGameProblem extends Problem  {
 	@Override
 	public State transitionFunction(State currentState, char operator) {
 		EndGameState currentEndState = (EndGameState) currentState; 
-		int nextIronManX = currentEndState.getIronManX();
+		Vector2 nextIronManPos = currentEndState.getIronManPos();
 		int nextIronManY = currentEndState.getIronManY();
 		boolean snaped = currentEndState.isSnaped();
 		boolean[] killed = currentEndState.getKilled();
@@ -35,36 +37,27 @@ public class EndGameProblem extends Problem  {
 		switch(operator) {
 			case 'U' : 
 				// Checking if moving would cause outofBound
-				if(currentEndState.getIronManX() > 0) {
-					// Checking if next cell is free
-					if(nextCellFree(currentEndState.getIronManX() - 1, currentEndState.getIronManY(), 
-							currentEndState.getKilled()))
-						nextIronManX = currentEndState.getIronManX() - 1;
+				if(endGameGrid.isCellEmpty(nextIronManPos.Up(), currentEndState)) {
+					
 				}
+				break;
 			case 'D' :
 				// Checking if moving would cause outofBound
-				if(currentEndState.getIronManX() < 4) {
-					// Checking if next cell is free
-					if(nextCellFree(currentEndState.getIronManX() + 1, currentEndState.getIronManY(), 
-						currentEndState.getKilled()))
-					nextIronManX = currentEndState.getIronManX() + 1;
+				if(endGameGrid.isCellEmpty(nextIronManPos.Down(), currentEndState)) {
+					
 				}
+				break;
 			case 'L' :
 				// Checking if moving would cause outofBound
-				if(currentEndState.getIronManY() > 0){
-					// Checking if next cell is free
-					if(nextCellFree(currentEndState.getIronManX(), currentEndState.getIronManY() - 1, 
-						currentEndState.getKilled()))
-					nextIronManX = currentEndState.getIronManY() - 1;
+				if(endGameGrid.isCellEmpty(nextIronManPos.Left(), currentEndState)) {
+					
 				}
+				break;
 			case 'R' :
-				// Checking if moving would cause outofBound
-				if(currentEndState.getIronManY() < 4){
-					// Checking if next cell is free
-					if(nextCellFree(currentEndState.getIronManX(), currentEndState.getIronManY() + 1, 
-						currentEndState.getKilled()))
-					nextIronManX = currentEndState.getIronManY() + 1;
+				if(endGameGrid.isCellEmpty(nextIronManPos.Right(), currentEndState)) {
+					
 				}
+				break;
 			case 'C' : //TODO Collect operator transition
 			case 'K' : //TODO Kill operator transition
 			case 'S' : //TODO Snap operator transition
@@ -73,26 +66,26 @@ public class EndGameProblem extends Problem  {
 		return null;
 	}
 	
-	private boolean nextCellFree(int intendedPositionX, int intendedPositionY, boolean[] killedWarriors) {
-		boolean warriorFound = false;
-		boolean thanosFound = false;
-		
-		// Check if warrior is in the target cell of the operator
-		for(int i = 0; i < warriorsPositions.length(); i+=2) {
-			if(intendedPositionX == Character.getNumericValue(warriorsPositions.charAt(i))
-			&& intendedPositionY == Character.getNumericValue(warriorsPositions.charAt (i + 1))
-			&& !killedWarriors[i / 2]) {
-				return false;
-			}
-		}
-		
-		// Check if thanos is in the target cell of the operator
-		if(intendedPositionX == Character.getNumericValue(thanosPosition.charAt(0))
-		&& intendedPositionY == Character.getNumericValue(thanosPosition.charAt(1)))
-			return false;
-	
-		return true;
-	}
+//	private boolean nextCellFree(int intendedPositionX, int intendedPositionY, boolean[] killedWarriors) {
+//		boolean warriorFound = false;
+//		boolean thanosFound = false;
+//		
+//		// Check if warrior is in the target cell of the operator
+//		for(int i = 0; i < warriorsPositions.length(); i+=2) {
+//			if(intendedPositionX == Character.getNumericValue(warriorsPositions.charAt(i))
+//			&& intendedPositionY == Character.getNumericValue(warriorsPositions.charAt (i + 1))
+//			&& !killedWarriors[i / 2]) {
+//				return false;
+//			}
+//		}
+//		
+//		// Check if thanos is in the target cell of the operator
+//		if(intendedPositionX == Character.getNumericValue(thanosPosition.charAt(0))
+//		&& intendedPositionY == Character.getNumericValue(thanosPosition.charAt(1)))
+//			return false;
+//	
+//		return true;
+//	}
 
 	@Override
 	public boolean goalTest(State currentState) {
@@ -101,8 +94,17 @@ public class EndGameProblem extends Problem  {
 	}
 
 	@Override
-	public int pathCost(State currentState, char operator) {
-		// TODO calculating the path cost
+	public int pathCost(State newState, char operator) {
+		
+		int totalDamage = 0;
+		EndGameState newEndGameState = (EndGameState) newState;
+		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Up(), newEndGameState).getCellDamage();
+		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Down(), newEndGameState).getCellDamage();
+		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Left(), newEndGameState).getCellDamage();
+		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Right(), newEndGameState).getCellDamage();
+		
+		
+		//TODO add the cost of the Operator
 		
 		return 0;
 	}

@@ -228,6 +228,10 @@ public class EndGameGrid {
 		System.out.println(grid.isCellEmpty(new Vector2(0, 3), state));
 		System.out.println(!grid.doesCellContain(new Vector2(0, 3),EndGameCellType.WARRIOR, state));
 		
+
+		state = new EndGameState(1,2,false);
+		System.out.println(grid.getGridCellContent(new Vector2(3,1 ), state).getCellDamage());
+		
 		System.out.println(grid.doesCellContain(new Vector2(-1, 3),EndGameCellType.WARRIOR, state));
 		System.out.println(grid.isCellEmpty(new Vector2(-1, 3), state));
 	
