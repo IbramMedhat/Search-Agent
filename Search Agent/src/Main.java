@@ -84,7 +84,7 @@ public class Main {
 			
 			// Creating the new node and adding it to the queue
 			// Changing the path cost function to take current node and current operator
-			toBeExpandedQueueDT.add(new Node(nextState, 
+			toBeExpandedQueueDT.addFirst(new Node(nextState, 
 											currentNode, 
 											operator,
 											currentNode.getDepth() + 1,
