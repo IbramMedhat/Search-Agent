@@ -92,20 +92,24 @@ public class EndGameGrid {
 	
 	public EndGameCellType getGridCellContent(int x, int y, EndGameState currentState)
 	{
-		EndGameCellType obj = null;
-		switch(gridCells[x][y].getContent())
-		{
-			default:
-				obj = gridCells[x][y].getContent();
-				break;	
-			case WARRIOR:
-				obj = currentState.getKilled()[gridCells[x][y].getContentIndex()]? EndGameCellType.EMPTY : EndGameCellType.WARRIOR;
-				break;
-			case STONE:
-				obj =  currentState.getStonesCollected()[gridCells[x][y].getContentIndex()]? EndGameCellType.EMPTY : EndGameCellType.STONE;
-				break;				
+		try {
+			EndGameCellType obj = null;
+			switch(gridCells[x][y].getContent())
+			{
+				default:
+					obj = gridCells[x][y].getContent();
+					break;	
+				case WARRIOR:
+					obj = currentState.getKilled()[gridCells[x][y].getContentIndex()]? EndGameCellType.EMPTY : EndGameCellType.WARRIOR;
+					break;
+				case STONE:
+					obj =  currentState.getStonesCollected()[gridCells[x][y].getContentIndex()]? EndGameCellType.EMPTY : EndGameCellType.STONE;
+					break;				
+			}
+			return obj;
+		} catch (IndexOutOfBoundsException e) {
+			return EndGameCellType.OUTOFBOUND;
 		}
-		return obj;
 	}
 	
 	public boolean isCellEmpty(Vector2 pos, EndGameState currentState)
@@ -115,26 +119,32 @@ public class EndGameGrid {
 	
 	public boolean isCellEmpty(int x, int y, EndGameState currentState)
 	{
-		if((gridCells[x][y].getContent() == EndGameCellType.EMPTY))
+		try 
 		{
-			return true;
-		}
-		else
-		{
-			boolean empty = false;
-			switch(gridCells[x][y].getContent())
+			if((gridCells[x][y].getContent() == EndGameCellType.EMPTY))
 			{
-				case WARRIOR:
-					empty = currentState.getKilled()[gridCells[x][y].getContentIndex()];
-					break;
-				case STONE:
-					empty =  currentState.getStonesCollected()[gridCells[x][y].getContentIndex()];
-					break;
-				default:
-					break;		
-			} 
-			return empty;
+				return true;
+			}
+			else
+			{
+				boolean empty = false;
+				switch(gridCells[x][y].getContent())
+				{
+					case WARRIOR:
+						empty = currentState.getKilled()[gridCells[x][y].getContentIndex()];
+						break;
+					case STONE:
+						empty =  currentState.getStonesCollected()[gridCells[x][y].getContentIndex()];
+						break;
+					default:
+						break;		
+				} 
+				return empty;
+			}
+		} catch (IndexOutOfBoundsException e) {
+			return false;
 		}
+
 	}
 	
 	public boolean doesCellContain(Vector2 pos, EndGameCellType object, EndGameState currentState)
@@ -144,26 +154,31 @@ public class EndGameGrid {
 	
 	public boolean doesCellContain(int x, int y, EndGameCellType object, EndGameState currentState)
 	{
-		if(gridCells[x][y].getContent() != object)
-		{
+		try {
+			if(gridCells[x][y].getContent() != object)
+			{
+				return false;
+			}
+			else
+			{
+				boolean decision = true;
+				switch(gridCells[x][y].getContent())
+				{
+					case WARRIOR:
+						decision = !currentState.getKilled()[gridCells[x][y].getContentIndex()];
+						break;
+					case STONE:
+						decision =  !currentState.getStonesCollected()[gridCells[x][y].getContentIndex()];
+						break;
+					default:
+						break;		
+				}
+				return decision;
+			}
+		} catch (IndexOutOfBoundsException e) {
 			return false;
 		}
-		else
-		{
-			boolean decision = true;
-			switch(gridCells[x][y].getContent())
-			{
-				case WARRIOR:
-					decision = !currentState.getKilled()[gridCells[x][y].getContentIndex()];
-					break;
-				case STONE:
-					decision =  !currentState.getStonesCollected()[gridCells[x][y].getContentIndex()];
-					break;
-				default:
-					break;		
-			}
-			return decision;
-		}
+
 	}
 		
 	
@@ -212,6 +227,10 @@ public class EndGameGrid {
 		System.out.println(grid.getGridCellContent(new Vector2(0, 3), state) == EndGameCellType.EMPTY);
 		System.out.println(grid.isCellEmpty(new Vector2(0, 3), state));
 		System.out.println(!grid.doesCellContain(new Vector2(0, 3),EndGameCellType.WARRIOR, state));
+		
+		System.out.println(grid.doesCellContain(new Vector2(-1, 3),EndGameCellType.WARRIOR, state));
+		System.out.println(grid.isCellEmpty(new Vector2(-1, 3), state));
+	
 	}
 
 }
