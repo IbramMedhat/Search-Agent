@@ -1,17 +1,18 @@
 import java.util.ArrayList;
 
 public class EndGameState extends State {
-	private int ironManX;
-	private int ironManY;
+	private Vector2 ironManPos;
 	private boolean snaped;
 	private boolean[] killed;
 	private boolean[] stonesCollected; 
 	
-	
 	public EndGameState(int ironManX, int ironManY, boolean snaped, int numOfWarriors, int numOfInfintyStones) {
+		this(new Vector2(ironManX, ironManY), snaped, numOfWarriors, numOfInfintyStones);
+	}
+	
+	public EndGameState(Vector2 ironManPos, boolean snaped, int numOfWarriors, int numOfInfintyStones) {
 		super();
-		this.ironManX = ironManX;
-		this.ironManY = ironManY;
+		this.ironManPos = ironManPos;
 		this.stonesCollected = new boolean[numOfInfintyStones];
 		this.snaped = snaped;
 		this.killed = new boolean[numOfWarriors];
@@ -22,13 +23,18 @@ public class EndGameState extends State {
 	}
 
 	public int getIronManX() {
-		return ironManX;
+		return ironManPos.x;
 	}
 
 	public int getIronManY() {
-		return ironManY;
+		return ironManPos.y;
 	}
-
+	
+	public Vector2 getIronManPos()
+	{
+		return ironManPos;
+	}
+	
 	public boolean[] getStonesCollected() {
 		return stonesCollected;
 	}
@@ -43,14 +49,6 @@ public class EndGameState extends State {
 
 	public void setKilled(boolean[] killed) {
 		this.killed = killed;
-	}
-
-	public void setIronManX(int ironManX) {
-		this.ironManX = ironManX;
-	}
-
-	public void setIronManY(int ironManY) {
-		this.ironManY = ironManY;
 	}
 
 	public void setSnaped(boolean snaped) {
