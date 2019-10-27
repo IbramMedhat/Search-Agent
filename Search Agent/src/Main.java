@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 public class Main {
 	
@@ -60,7 +59,6 @@ public class Main {
 	}
 	
 	public static void expand(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem, String queueingFunction){
-		EndGameState currentState = (EndGameState) currentNode.getCurrentState();
 		
 		switch (queueingFunction) {	
 			case "enqueueAtFront":
@@ -79,8 +77,7 @@ public class Main {
 	public static void enqueueAtFront(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
 		for(int i = 0;i < problem.getOperators().length(); i++) {
 			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
-			EndGameState currentState = (EndGameState) currentNode.getCurrentState(); //getting the current expanded state 
-			EndGameState nextState = (EndGameState) problem.transitionFunction(currentState, operator);
+			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
 			
 			// Creating the new node and adding it to the front of the queue
 			// Changing the path cost function to take current node and current operator
@@ -95,8 +92,7 @@ public class Main {
 	public static void enqueueAtEnd(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
 		for(int i = 0;i < problem.getOperators().length(); i++) {
 			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
-			EndGameState currentState = (EndGameState) currentNode.getCurrentState(); //getting the current expanded state 
-			EndGameState nextState = (EndGameState) problem.transitionFunction(currentState, operator);
+			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
 			
 			// Creating the new node and adding it to the end of the queue
 			// Changing the path cost function to take current node and current operator
