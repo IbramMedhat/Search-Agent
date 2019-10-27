@@ -7,18 +7,18 @@ public class Main {
 	public static String solve(String grid, String strategy, boolean visualize) {
 		
 		EndGameProblem problem = new EndGameProblem(grid);
-		
+		Node goalNode = null;
 		switch(strategy) {
 			case "BF":
-				generalSearch(problem, "enqueueAtEnd");break;
+				goalNode = generalSearch(problem, "enqueueAtEnd");break;
 			case "DF":
-				generalSearch(problem, "enqueueAtFront");break;
+				goalNode = generalSearch(problem, "enqueueAtFront");break;
 			
 			case "ID":
-				generalSearch(problem, "enqueueAtEnd");break; //TODO Applying depth limited search till goal is reached
+				goalNode = generalSearch(problem, "enqueueAtEnd");break; //TODO Applying depth limited search till goal is reached
 				
 			case "UC":
-				generalSearch(problem, "orderedInsert");break;
+				goalNode = generalSearch(problem, "orderedInsert");break;
 				
 //			case "GR1":
 //				generalSearch(problem, "enqueueAtEnd");break; //TODO 
@@ -33,8 +33,12 @@ public class Main {
 //				generalSearch(problem, "enqueueAtEnd");break;
 //			
 		}
-		
-		return "";
+		if(goalNode == null)
+			return "There is no solution";
+		else {
+			//TODO return sequence of operators leading to this goal node
+			return "";
+		}
 	}
 	
 	public static Node generalSearch(Problem problem, String queueingFunction) {
@@ -75,11 +79,12 @@ public class Main {
 	public static void enqueueAtFront(QueueDT toBeExpandedQueueDT, Node currentNode, Problem problem) {
 		for(int i = 0;i < problem.getOperators().length(); i++) {
 			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
-			
 			EndGameState currentState = (EndGameState) currentNode.getCurrentState(); //getting the current expanded state 
+			EndGameState nextState = (EndGameState) problem.transitionFunction(currentState, operator);
+			
 			// Creating the new node and adding it to the queue
 			// Changing the path cost function to take current node and current operator
-			toBeExpandedQueueDT.add(new Node(problem.transitionFunction(currentState, operator), 
+			toBeExpandedQueueDT.add(new Node(nextState, 
 											currentNode, 
 											operator,
 											currentNode.getDepth() + 1,
