@@ -208,7 +208,7 @@ public class EndGameGrid {
 
 	public static void main(String [] args)
 	{
-		TestGridFunctionality();
+		//TestGridFunctionality();
 	}	
 	
 	private static void TestGridFunctionality()
