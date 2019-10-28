@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Main {
 	
@@ -9,15 +10,15 @@ public class Main {
 		Node goalNode = null;
 		switch(strategy) {
 			case "BF":
-				goalNode = generalSearch(problem, "enqueueAtEnd");break;
+				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_END);break;
 			case "DF":
-				goalNode = generalSearch(problem, "enqueueAtFront");break;
+				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_FRONT);break;
 			
 			case "ID":
-				goalNode = generalSearch(problem, "enqueueAtEnd");break; //TODO Applying depth limited search till goal is reached
+				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_END);break; //TODO Applying depth limited search till goal is reached
 				
 			case "UC":
-				goalNode = generalSearch(problem, "orderedInsert");break;
+				goalNode = generalSearch(problem, QueueingFunction.SORTED_INSERT);break;
 				
 //			case "GR1":
 //				generalSearch(problem, "enqueueAtEnd");break; //TODO 
@@ -40,7 +41,7 @@ public class Main {
 		}
 	}
 	
-	public static Node generalSearch(Problem problem, String queueingFunction) {
+	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction) {
 		
 		QueueDT<Node> toBeExpandedNodes = new QueueDT<Node>();
 		//TODO choosing between different queueing functions
@@ -58,54 +59,74 @@ public class Main {
 		
 	}
 	
-	public static void expand(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem, String queueingFunction){
+	public static void expand(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem, QueueingFunction queueingFunction){
 		
-		switch (queueingFunction) {	
-			case "enqueueAtFront":
-				enqueueAtFront(toBeExpandedQueueDT, currentNode, problem);break;
-			case "enqueueAtEnd":
-				enqueueAtEnd(toBeExpandedQueueDT, currentNode, problem);break;
-			
-			case "orderedInsert":
-				orderedInsert(toBeExpandedQueueDT, currentNode, problem);break;
-			default:
-				break;
-		}		
 		
-	}
-
-	public static void enqueueAtFront(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
+		//Expanding Current Node and getting its children
+		ArrayList<Node> childrenNodes = new ArrayList<Node>();
 		for(int i = 0;i < problem.getOperators().length(); i++) {
 			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
 			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
 			
 			// Creating the new node and adding it to the front of the queue
 			// Changing the path cost function to take current node and current operator
-			toBeExpandedQueueDT.addFirst(new Node(nextState, 
+			childrenNodes.add(new Node(nextState, 
 											currentNode, 
 											operator,
 											currentNode.getDepth() + 1,
 											problem.pathCost(currentNode, nextState, operator)));
 		}
+		
+		switch (queueingFunction) {
+		case ENQUEUE_AT_END:
+			enqueueAtEnd(toBeExpandedQueueDT, childrenNodes);
+			break;
+		case ENQUEUE_AT_FRONT:
+			enqueueAtFront(toBeExpandedQueueDT, childrenNodes);
+			break;
+		case SORTED_INSERT:
+			orderedInsert(toBeExpandedQueueDT, childrenNodes);
+			break;
+		default:
+			break;	
+		
+		
+		}		
+		
 	}
-	
-	public static void enqueueAtEnd(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
-		for(int i = 0;i < problem.getOperators().length(); i++) {
-			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
-			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
-			
-			// Creating the new node and adding it to the end of the queue
-			// Changing the path cost function to take current node and current operator
-			toBeExpandedQueueDT.add(new Node(nextState, 
-											currentNode, 
-											operator,
-											currentNode.getDepth() + 1,
-											problem.pathCost(currentNode, nextState, operator)));
+
+	public static void enqueueAtFront(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+		for (Node node : childrenNodes) {
+			toBeExpandedQueueDT.addFirst(node);
 		}
 	}
 	
-	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem) {
+	public static void enqueueAtEnd(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+		for (Node node : childrenNodes) {
+			toBeExpandedQueueDT.add(node);
+		}
+	}
+	
+	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		//TODO ordered insertion based on each node path cost
+		boolean inserted = false;
+		for (Node nodeToBeInserted : childrenNodes) {
+			inserted = false;
+			int currentCost = nodeToBeInserted.getPathCost();
+			for(int i = 0; i < toBeExpandedQueueDT.size(); i++)
+			{
+				Node queueNode = (Node) toBeExpandedQueueDT.getItem(i);
+				if(queueNode.getPathCost() > currentCost)
+				{
+					toBeExpandedQueueDT.insertAt(i, nodeToBeInserted);
+					inserted = true;
+					break;
+				}
+			}
+			// if the queue is empty or if nodeToBeInserted Cost is greater than all the queues' nodes
+			if(!inserted)
+				toBeExpandedQueueDT.add(nodeToBeInserted);
+		}
 		
 	}
 	

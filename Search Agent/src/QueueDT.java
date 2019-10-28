@@ -116,5 +116,15 @@ public class QueueDT<E> implements Queue{
 	public Object peek() {
 		return queue.getFirst();
 	}
+	
+	public void insertAt(int i ,E element)
+	{
+		queue.add(i, element);
+	}
+	
+	public Object getItem(int i)
+	{
+		return queue.get(i);
+	}
 
 }
