@@ -142,8 +142,10 @@ public class EndGameGrid {
 						empty = currentState.isWarriorKilled(gridCells[x][y].getContentIndex());
 						break;
 					case STONE:
-						empty =  currentState.isStoneCollected(gridCells[x][y].getContentIndex());
+						empty =  true;
 						break;
+					case THANOS:
+						empty = currentState.areAllStoneCollected();
 					default:
 						break;		
 				} 

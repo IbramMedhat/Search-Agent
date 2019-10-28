@@ -66,6 +66,7 @@ public class EndGameProblem extends Problem  {
 				if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.STONE, currentEndState)) {
 					newEndGameState.setStoneCollected(endGameGrid.getEndGameCell(currentIronManPos).getContentIndex());
 				}
+				break;
 			case 'K' : 
 				// Checking in all adjacent cells to kill all surrounding warriors 
 				if(endGameGrid.doesCellContain(currentIronManPos.Up(), EndGameCellType.WARRIOR, currentEndState)) {
@@ -80,6 +81,7 @@ public class EndGameProblem extends Problem  {
 				if(endGameGrid.doesCellContain(currentIronManPos.Left(), EndGameCellType.WARRIOR, currentEndState)) {
 					newEndGameState.setWarriorKilled(endGameGrid.getEndGameCell(currentIronManPos.Left()).getContentIndex());
 				}
+				break;
 			case 'S' : 
 //				boolean allCollected = true;
 //				for(int i = 0; i < stonesCollected.length; i++) {
@@ -93,6 +95,7 @@ public class EndGameProblem extends Problem  {
 					if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.THANOS, currentEndState))
 						newEndGameState.setSnapped();
 				}
+				break;
 		}
 		
 		//checking if the state is not equal the parent state

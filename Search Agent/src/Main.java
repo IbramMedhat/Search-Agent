@@ -4,9 +4,12 @@ public class Main {
 	
 	//TODO Adding queueDT class implementation
 	
+	public static int lastPrint = 0;
+	public static int expandedNodes = 0;
+	
 	public static void main(String [] args)
 	{
-		solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "BF", false);
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "DF", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -47,7 +50,17 @@ public class Main {
 			return "There is no solution";
 		else {
 			//TODO return sequence of operators leading to this goal node
-			return "";
+			Node currentNode = goalNode;
+			String operators = "";
+			String states = "";
+			String pathCost = "Path Cost: "+goalNode.getPathCost();
+			while(currentNode != null) {
+				operators = ","+currentNode.getOperator() + operators;
+				states = currentNode.getCurrentState()+"\n"+states;
+				currentNode = currentNode.getParentNode();
+			}
+			operators = "Solution:"+operators+"\n"+states+pathCost;
+			return operators;
 		}
 	}
 	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction) {
@@ -61,18 +74,26 @@ public class Main {
 		//TODO choosing between different queueing functions
 		
 		//enqueue initial state before starting the expanding process
-		toBeExpandedNodes.add(new Node(problem.getInitialState(), null, '\0', 0, 0));
+		Node initialNode = new Node(problem.getInitialState(), null, '\0', 0, 0);
+		System.out.println(initialNode);
+		toBeExpandedNodes.add(initialNode);
 		
 		//add initial state to visitedStates
 		visitedStates.AddInitialState(problem.getInitialState());
 		
 		Node currentNode = (Node) toBeExpandedNodes.poll();
+	
+		System.out.println(toBeExpandedNodes.isEmpty());
 		while(currentNode != null && !problem.goalTest(currentNode.getCurrentState())) {
 			if(currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT) {
 				expand(toBeExpandedNodes, visitedStates,  currentNode, problem, queueingFunction);
-				System.out.println("Expanded!");
+//				System.out.println("Expanded!");
 			}
-			currentNode = (Node) toBeExpandedNodes.poll();
+			if(!toBeExpandedNodes.isEmpty())
+				currentNode = (Node) toBeExpandedNodes.poll();
+			else
+				currentNode = null;
+					
 		}
 		return currentNode;
 		
@@ -87,13 +108,22 @@ public class Main {
 			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
 			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
 			
-			//Checking if this state is repeated
-			if(nextState != null && visitedStates.isStateRepeated(nextState))
+			if(nextState != null && !visitedStates.isStateRepeated(nextState))
 			{
 				 //Creating the new node and adding it to the front of the queue
 				// Changing the path cost function to take current node and current operator
-				System.out.println("Added Child " + i);
-				System.out.println(nextState.state);
+//				System.out.println("Added Child " + i);
+//				System.out.println(nextState);
+				
+//				expandedNodes++;
+//				//Checking if this state is repeated
+//				
+//				if(expandedNodes/ 500 > lastPrint){
+//					
+//					System.out.println(expandedNodes);
+//					lastPrint++;
+//				}
+				
 				
 				childrenNodes.add(new Node(nextState, 
 												currentNode, 
@@ -106,7 +136,7 @@ public class Main {
 		
 		switch (queueingFunction) {
 		case ENQUEUE_AT_END:
-			System.out.println("children Nodes Size : " + childrenNodes.size());
+//			System.out.println("children Nodes Size : " + childrenNodes.size());
 			enqueueAtEnd(toBeExpandedQueueDT, childrenNodes);
 			break;
 		case ENQUEUE_AT_FRONT_WITH_LIMIT:
@@ -133,7 +163,7 @@ public class Main {
 	public static void enqueueAtEnd(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		for (Node node : childrenNodes) {
 			toBeExpandedQueueDT.add(node);
-			System.out.println(toBeExpandedQueueDT.size());
+//			System.out.println("Queue Size: "+toBeExpandedQueueDT.size());
 		}
 	}
 	
