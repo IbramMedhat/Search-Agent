@@ -63,6 +63,8 @@ public class Main {
 		//enqueue initial state before starting the expanding process
 		toBeExpandedNodes.add(new Node(problem.getInitialState(), null, '\0', 0, 0));
 		
+		//add initial state to visitedStates
+		visitedStates.AddInitialState(problem.getInitialState());
 		
 		Node currentNode = (Node) toBeExpandedNodes.poll();
 		while(currentNode != null && !problem.goalTest(currentNode.getCurrentState())) {
@@ -85,7 +87,7 @@ public class Main {
 			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
 			
 			//Checking if this state is repeated
-			if(nextState != null && visitedStates.CheckState(nextState))
+			if(nextState != null && visitedStates.isStateRepeated(nextState))
 			{
 				// Creating the new node and adding it to the front of the queue
 				// Changing the path cost function to take current node and current operator
