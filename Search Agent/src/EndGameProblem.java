@@ -59,8 +59,18 @@ public class EndGameProblem extends Problem  {
 					stonesCollected[endGameGrid.getEndGameCell(currentIronManPos).getContentIndex()] = true;
 				}
 			case 'K' : 
-				if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.WARRIOR, currentEndState)) {
-					killed[endGameGrid.getEndGameCell(currentIronManPos).getContentIndex()] = true;
+				// Checking in all adjacent cells to kill all surrounding warriors 
+				if(endGameGrid.doesCellContain(currentIronManPos.Up(), EndGameCellType.WARRIOR, currentEndState)) {
+					killed[endGameGrid.getEndGameCell(currentIronManPos.Up()).getContentIndex()] = true;
+				}
+				if(endGameGrid.doesCellContain(currentIronManPos.Down(), EndGameCellType.WARRIOR, currentEndState)) {
+					killed[endGameGrid.getEndGameCell(currentIronManPos.Down()).getContentIndex()] = true;
+				}
+				if(endGameGrid.doesCellContain(currentIronManPos.Right(), EndGameCellType.WARRIOR, currentEndState)) {
+					killed[endGameGrid.getEndGameCell(currentIronManPos.Right()).getContentIndex()] = true;
+				}
+				if(endGameGrid.doesCellContain(currentIronManPos.Left(), EndGameCellType.WARRIOR, currentEndState)) {
+					killed[endGameGrid.getEndGameCell(currentIronManPos.Left()).getContentIndex()] = true;
 				}
 			case 'S' : 
 				boolean allCollected = true;
@@ -71,7 +81,7 @@ public class EndGameProblem extends Problem  {
 					}
 				}
 				if(allCollected) {
-					// Checking if all stones are collected and thanos is in the same cell as ironman
+					// Checking if all stones are collected and Thanos is in the same cell as ironman
 					if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.THANOS, currentEndState))
 						snaped = true;
 				}
@@ -123,6 +133,7 @@ public class EndGameProblem extends Problem  {
 		switch(operator) {
 			case 'C' : totalDamage += 3;break;
 			case 'K' : totalDamage += 2;break;
+			default : totalDamage += 0;break; // Costs for the other five operators are zero
 		}
 		return totalDamage;
 	}
