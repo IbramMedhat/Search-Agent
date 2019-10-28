@@ -9,7 +9,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "BF", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "ID", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -25,7 +25,7 @@ public class Main {
 			case "ID":
 				// Iterative Deepening can not return null node as it is complete
 				int depthLimit = 0;
-				while(!problem.goalTest(goalNode.getCurrentState()) || goalNode == null) {
+				while(goalNode == null || !problem.goalTest(goalNode.getCurrentState())) {
 					goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT, depthLimit);
 					depthLimit++;
 				}
