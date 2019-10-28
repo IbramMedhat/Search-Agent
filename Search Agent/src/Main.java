@@ -23,7 +23,7 @@ public class Main {
 				// Iterative Deepening can not return null node as it is complete
 				int depthLimit = 0;
 				while(!problem.goalTest(goalNode.getCurrentState()) || goalNode == null) {
-					goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_END_WITH_LIMIT, depthLimit);
+					goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT, depthLimit);
 					depthLimit++;
 				}
 				break;
@@ -66,8 +66,9 @@ public class Main {
 		
 		Node currentNode = (Node) toBeExpandedNodes.poll();
 		while(currentNode != null && !problem.goalTest(currentNode.getCurrentState())) {
-			if(currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_END_WITH_LIMIT) {
+			if(currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT) {
 				expand(toBeExpandedNodes, visitedStates,  currentNode, problem, queueingFunction);
+				System.out.println("Expanded!");
 			}
 			currentNode = (Node) toBeExpandedNodes.poll();
 		}
@@ -87,8 +88,11 @@ public class Main {
 			//Checking if this state is repeated
 			if(nextState != null && visitedStates.CheckState(nextState))
 			{
-				// Creating the new node and adding it to the front of the queue
+				 //Creating the new node and adding it to the front of the queue
 				// Changing the path cost function to take current node and current operator
+				System.out.println("Added Child " + i);
+				System.out.println(nextState.state);
+				
 				childrenNodes.add(new Node(nextState, 
 												currentNode, 
 												operator,
@@ -100,8 +104,10 @@ public class Main {
 		
 		switch (queueingFunction) {
 		case ENQUEUE_AT_END:
+			System.out.println("children Nodes Size : " + childrenNodes.size());
 			enqueueAtEnd(toBeExpandedQueueDT, childrenNodes);
 			break;
+		case ENQUEUE_AT_FRONT_WITH_LIMIT:
 		case ENQUEUE_AT_FRONT:
 			enqueueAtFront(toBeExpandedQueueDT, childrenNodes);
 			break;
@@ -110,19 +116,22 @@ public class Main {
 			break;
 		default:
 			break;	
-		}		
+		}
+	
 		
 	}
 
 	public static void enqueueAtFront(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		for (Node node : childrenNodes) {
 			toBeExpandedQueueDT.addFirst(node);
+			
 		}
 	}
 	
 	public static void enqueueAtEnd(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		for (Node node : childrenNodes) {
 			toBeExpandedQueueDT.add(node);
+			System.out.println(toBeExpandedQueueDT.size());
 		}
 	}
 	
