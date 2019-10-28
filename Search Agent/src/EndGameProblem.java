@@ -120,10 +120,14 @@ public class EndGameProblem extends Problem  {
 	}
 
 	@Override
-	public int pathCost(State newState, char operator) {
+	public int pathCost(Node parentNode, State newState, char operator) {
 		
 		int totalDamage = 0;
 		EndGameState newEndGameState = (EndGameState) newState;
+		EndGameState parentEndGameState = (EndGameState) parentNode.getCurrentState();
+		int numOfSurroundingWarriors = 0;
+		
+		// Adding damage caused of being adjacent to warriors or thanos
 		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Up(), newEndGameState).getCellDamage();
 		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Down(), newEndGameState).getCellDamage();
 		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Left(), newEndGameState).getCellDamage();
@@ -131,11 +135,21 @@ public class EndGameProblem extends Problem  {
 		
 		
 		switch(operator) {
-			case 'C' : totalDamage += 3;break;
-			case 'K' : totalDamage += 2;break;
+			case 'C' : totalDamage += 3;break; // Cost for collect infinity stone is 3
+			case 'K' : 
+				// Incrementing damage by 2 for each warrior adjacent to ironman before kill operator
+				if(endGameGrid.doesCellContain(parentEndGameState.getIronManPos().Up(), EndGameCellType.WARRIOR, parentEndGameState))
+					numOfSurroundingWarriors ++;
+				if(endGameGrid.doesCellContain(parentEndGameState.getIronManPos().Down(), EndGameCellType.WARRIOR, parentEndGameState))
+					numOfSurroundingWarriors ++;
+				if(endGameGrid.doesCellContain(parentEndGameState.getIronManPos().Left(), EndGameCellType.WARRIOR, parentEndGameState))
+					numOfSurroundingWarriors ++;
+				if(endGameGrid.doesCellContain(parentEndGameState.getIronManPos().Right(), EndGameCellType.WARRIOR, parentEndGameState))
+					numOfSurroundingWarriors ++;
+				totalDamage = totalDamage + (2 * numOfSurroundingWarriors);break;
 			default : totalDamage += 0;break; // Costs for the other five operators are zero
 		}
-		return totalDamage;
+		return totalDamage + parentNode.getPathCost();
 	}
 
 }

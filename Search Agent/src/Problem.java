@@ -9,7 +9,7 @@ public abstract class Problem {
 	
 	public abstract boolean goalTest(State currentState);
 	
-	public abstract  int pathCost(State currentState, char operator);
+	public abstract  int pathCost(Node parentNode, State currentState, char operator);
 
 	public String getOperators() {
 		return operators;
