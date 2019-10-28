@@ -20,8 +20,13 @@ public class Main {
 				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_FRONT);break;
 			
 			case "ID":
-				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_END);break; //TODO Applying depth limited search till goal is reached
-				
+				// Iterative Deepening can not return null node as it is complete
+				int depthLimit = 0;
+				while(!problem.goalTest(goalNode.getCurrentState()) || goalNode == null) {
+					goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_AT_END_WITH_LIMIT, depthLimit);
+					depthLimit++;
+				}
+				break;
 			case "UC":
 				goalNode = generalSearch(problem, QueueingFunction.SORTED_INSERT);break;
 				
@@ -45,8 +50,11 @@ public class Main {
 			return "";
 		}
 	}
-	
 	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction) {
+		return generalSearch(problem, queueingFunction, 0);
+	}
+	
+	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction, int depthLimit) {
 		
 		QueueDT<Node> toBeExpandedNodes = new QueueDT<Node>();
 		VisitedStateList visitedStates = new VisitedStateList();
@@ -55,10 +63,12 @@ public class Main {
 		//enqueue initial state before starting the expanding process
 		toBeExpandedNodes.add(new Node(problem.getInitialState(), null, '\0', 0, 0));
 		
+		
 		Node currentNode = (Node) toBeExpandedNodes.poll();
-		while(currentNode != null || !problem.goalTest(currentNode.getCurrentState())) {
-
-			expand(toBeExpandedNodes, visitedStates, currentNode, problem, queueingFunction);
+		while(currentNode != null && !problem.goalTest(currentNode.getCurrentState())) {
+			if(currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_END_WITH_LIMIT) {
+				expand(toBeExpandedNodes, visitedStates,  currentNode, problem, queueingFunction);
+			}
 			currentNode = (Node) toBeExpandedNodes.poll();
 		}
 		return currentNode;
@@ -100,8 +110,6 @@ public class Main {
 			break;
 		default:
 			break;	
-		
-		
 		}		
 		
 	}
