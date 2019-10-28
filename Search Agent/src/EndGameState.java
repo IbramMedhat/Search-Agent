@@ -83,12 +83,29 @@ public class EndGameState extends State {
 		state = (state | (1<<i));
 	}
 	
+	public int CollectedStonesCount()
+	{
+		return SumloopBits(24,6);
+	}
+	
+	public int KilledWarriorsCount()
+	{
+		return SumloopBits(0,16);
+	}
+	
 	public String toString() {
+		
 		Vector2 pos = this.getIronManPos();
 		boolean snaped = this.isSnapped();
-		String stones = "Stones: ("+ loopBits(24, 6) + "), ";
-		String warriors = "Warriors: ("+ loopBits(0, 16) + ") ";
-	    return "Pos: "+pos+", Snapped: "+snaped+", "+stones+warriors;
+//		String stones = "Stones: ("+ loopBits(24, 6) + "), ";
+//		String warriors = "Warriors: ("+ loopBits(0, 16) + ") ";
+//	    return "Pos: "+pos+", Snapped: "+snaped+", "+stones+warriors;
+		
+		
+		//if you want to print sums only
+		return pos+" "+snaped+" S:"+SumloopBits(24,6)+"  W:"+SumloopBits(0,5);
+		
+	    
 	}
 	
 	private String loopBits(int offset, int size)
@@ -97,6 +114,16 @@ public class EndGameState extends State {
 		for(int i = size - 1 ; i > -1 ; i--)
 		{
 			 result = result + ((state & (1<<i+offset))>>(i+offset)) +",";
+		}
+		return result;
+	}
+	
+	private int SumloopBits(int offset, int size)
+	{
+		int result = 0;
+		for(int i = size - 1 ; i > -1 ; i--)
+		{
+			 result = result + ((state & (1<<i+offset))>>(i+offset));
 		}
 		return result;
 	}

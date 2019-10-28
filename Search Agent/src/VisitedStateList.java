@@ -2,40 +2,58 @@ import java.util.LinkedList;
 
 public class VisitedStateList {
 	
-	private LinkedList<State> list;
+	private LinkedList<LinkedList<LinkedList<State>>> list;
 	
 	public VisitedStateList()
 	{
-		this.list = new LinkedList<State>();
+		this.list = new LinkedList<LinkedList<LinkedList<State>>>();
+		
+		for(int i = 0; i < 7; i++)
+		{
+			LinkedList<LinkedList<State>> stoneList = new LinkedList<LinkedList<State>>();
+			for(int j = 0; j < 17; j++)
+			{
+				stoneList.add(new LinkedList<State>());
+			}
+			list.add(stoneList);
+		}
 	}
 	public void AddInitialState(State state) {
 		if(list.size() == 0)
 		{
-			list.add(state);
+			list.get(0).get(0).add(state);
 		}
 	}
 	public boolean isStateRepeated(State state)
 	{
 		int foundState = 0;
-		foundState = findStateLinearSearch(state.getRawState());
+		int stoneListIndex = ((EndGameState)state).CollectedStonesCount();
+		int monsterListIndex = ((EndGameState)state).KilledWarriorsCount();
+		LinkedList<State> searchList = list.get(stoneListIndex).get(monsterListIndex);
+		foundState = findStateBinarySearch(state.getRawState(), searchList);
 		if(foundState == -1) {
-			list.addLast(state);
+			searchList.addLast(state);
 			return false;
 		}
-		else if(list.get(foundState).getRawState() != state.getRawState())
+		else if(foundState == 0)
+		{
+			searchList.addFirst(state);
+			return false;
+		}
+		else if(searchList.get(foundState).getRawState() != state.getRawState())
 		{				
-			list.add(foundState, state);
+			searchList.add(foundState, state);
 			return false;
 		}
 		return true;
 	}
 	
-	private int findStateLinearSearch(int x)
+	private int findStateLinearSearch(int x, LinkedList<State> searchList)
 	{
 		int index = -1;
-		for (int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < searchList.size(); i++) {
 			
-			if(list.get(i).getRawState() >= x)
+			if(searchList.get(i).getRawState() >= x)
 			{
 				index = i;
 				break;
@@ -44,31 +62,31 @@ public class VisitedStateList {
 		return index;
 	}
 	
-	// private int findStateBinarySearch(int x) 
-    // { 
-    //     int l = 0, r = list.size() - 1; 
-    //     int finalIndex = 0;
-    //     while (l <= r) { 
-    //         int m = l + (r - l) / 2; 
+	 private int findStateBinarySearch(int x, LinkedList<State> searchList) 
+     { 
+         int l = 0, r = searchList.size() - 1; 
+         int finalIndex = 0;
+         while (l <= r) { 
+             int m = l + (r - l) / 2; 
             
-    //         // Check if x is present at mid 
-    //         if (list.get(m).getRawState() == x) 
-    //             return m; 
+             // Check if x is present at mid 
+             if (searchList.get(m).getRawState() == x) 
+                 return m; 
   
-    //         // If x greater, ignore left half 
-    //         if (list.get(m).getRawState()  < x) 
-    //             l = m + 1; 
+             // If x greater, ignore left half 
+             if (searchList.get(m).getRawState()  < x) 
+                 l = m + 1; 
   
-    //         // If x is smaller, ignore right half 
-    //         else
-    //             r = m - 1; 
-    //         finalIndex = m;
-    //     } 
+             // If x is smaller, ignore right half 
+             else
+                 r = m - 1; 
+             finalIndex = m;
+         } 
   
-    //     // if we reach here, then element was 
-    //     // not present 
-    //     return finalIndex; 
-    // } 
+         // if we reach here, then element was 
+         // not present 
+         return finalIndex; 
+     } 
 	
 //	public static boolean CheckStateInt(LinkedList<Integer> list, int state)
 //	{
@@ -120,6 +138,8 @@ public class VisitedStateList {
 		EndGameState state1 = new EndGameState(0);
 		EndGameState state2 = new EndGameState(0);
 		EndGameState state3 = new EndGameState(2);
+		
+		state2.setStoneCollected(0);
 		
 		list.isStateRepeated(state1);
 		list.isStateRepeated(state2);

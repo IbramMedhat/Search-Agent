@@ -9,7 +9,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "DF", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "BF", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -113,16 +113,18 @@ public class Main {
 				 //Creating the new node and adding it to the front of the queue
 				// Changing the path cost function to take current node and current operator
 //				System.out.println("Added Child " + i);
+				
+		
 //				System.out.println(nextState);
 				
-//				expandedNodes++;
-//				//Checking if this state is repeated
-//				
-//				if(expandedNodes/ 500 > lastPrint){
-//					
-//					System.out.println(expandedNodes);
-//					lastPrint++;
-//				}
+				expandedNodes++;
+				//Checking if this state is repeated
+				
+				if(expandedNodes/ 500 > lastPrint){
+					
+					System.out.println(expandedNodes);
+					lastPrint++;
+				}
 				
 				
 				childrenNodes.add(new Node(nextState, 
