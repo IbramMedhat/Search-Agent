@@ -13,6 +13,11 @@ public class EndGameProblem extends Problem  {
 		// Denoting endgame operators Up, Down, Left, Right, Collect, Kill and Snap
 		this.setOperators("UDLRCKS");
 		this.endGameGrid = new EndGameGrid(grid);
+		EndGameState initialState = new EndGameState();
+		initialState.setIronManPosition(endGameGrid.getInitialIronManPos());
+		
+		this.setInitialState(initialState);
+		System.out.println("Initial State: "+this.getInitialState());
 		
 	}
 
@@ -24,69 +29,77 @@ public class EndGameProblem extends Problem  {
 	public State transitionFunction(State currentState, char operator) {
 		EndGameState currentEndState = (EndGameState) currentState; 
 		Vector2 currentIronManPos = currentEndState.getIronManPos();
-		Vector2 nextIronManPos = currentIronManPos;
-		boolean snaped = currentEndState.isSnaped();
-		boolean[] killed = currentEndState.getKilled();
-		boolean[] stonesCollected = currentEndState.getStonesCollected();
+//		Vector2 nextIronManPos = currentIronManPos;
+		
+		EndGameState newEndGameState = new EndGameState(currentEndState.getRawState());
+		
+//		boolean snaped = currentEndState.isSnaped();
+//		boolean[] killed = currentEndState.getKilled();
+//		boolean[] stonesCollected = currentEndState.getStonesCollected();
 		// Applying transition function according to different operators
 		switch(operator) {
 			case 'U' : 
 				// Checking if moving would cause outofBound
 				if(endGameGrid.isCellEmpty(currentIronManPos.Up(), currentEndState)) {
-					nextIronManPos = currentIronManPos.Up();
+					newEndGameState.setIronManPosition(currentIronManPos.Up());
 				}
 				break;
 			case 'D' :
 				// Checking if moving would cause outofBound
 				if(endGameGrid.isCellEmpty(currentIronManPos.Down(), currentEndState)) {
-					nextIronManPos = currentIronManPos.Down();
+					newEndGameState.setIronManPosition(currentIronManPos.Down());
 				}
 				break;
 			case 'L' :
 				// Checking if moving would cause outofBound
 				if(endGameGrid.isCellEmpty(currentIronManPos.Left(), currentEndState)) {
-					nextIronManPos = currentIronManPos.Left();
+					newEndGameState.setIronManPosition(currentIronManPos.Left());
 				}
 				break;
 			case 'R' :
 				if(endGameGrid.isCellEmpty(currentIronManPos.Right(), currentEndState)) {
-					nextIronManPos = currentIronManPos.Right();
+					newEndGameState.setIronManPosition(currentIronManPos.Right());
 				}
 				break;
 			case 'C' : 
 				// Check if there is stone in the current ironman position
 				if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.STONE, currentEndState)) {
-					stonesCollected[endGameGrid.getEndGameCell(currentIronManPos).getContentIndex()] = true;
+					newEndGameState.setStoneCollected(endGameGrid.getEndGameCell(currentIronManPos).getContentIndex());
 				}
 			case 'K' : 
 				// Checking in all adjacent cells to kill all surrounding warriors 
 				if(endGameGrid.doesCellContain(currentIronManPos.Up(), EndGameCellType.WARRIOR, currentEndState)) {
-					killed[endGameGrid.getEndGameCell(currentIronManPos.Up()).getContentIndex()] = true;
+					newEndGameState.setWarriorKilled(endGameGrid.getEndGameCell(currentIronManPos.Up()).getContentIndex());
 				}
 				if(endGameGrid.doesCellContain(currentIronManPos.Down(), EndGameCellType.WARRIOR, currentEndState)) {
-					killed[endGameGrid.getEndGameCell(currentIronManPos.Down()).getContentIndex()] = true;
+					newEndGameState.setWarriorKilled(endGameGrid.getEndGameCell(currentIronManPos.Down()).getContentIndex());
 				}
 				if(endGameGrid.doesCellContain(currentIronManPos.Right(), EndGameCellType.WARRIOR, currentEndState)) {
-					killed[endGameGrid.getEndGameCell(currentIronManPos.Right()).getContentIndex()] = true;
+					newEndGameState.setWarriorKilled(endGameGrid.getEndGameCell(currentIronManPos.Right()).getContentIndex());
 				}
 				if(endGameGrid.doesCellContain(currentIronManPos.Left(), EndGameCellType.WARRIOR, currentEndState)) {
-					killed[endGameGrid.getEndGameCell(currentIronManPos.Left()).getContentIndex()] = true;
+					newEndGameState.setWarriorKilled(endGameGrid.getEndGameCell(currentIronManPos.Left()).getContentIndex());
 				}
 			case 'S' : 
-				boolean allCollected = true;
-				for(int i = 0; i < stonesCollected.length; i++) {
-					if(!stonesCollected[i]) {
-						allCollected = false;
-						break;
-					}
-				}
-				if(allCollected) {
+//				boolean allCollected = true;
+//				for(int i = 0; i < stonesCollected.length; i++) {
+//					if(!stonesCollected[i]) {
+//						allCollected = false;
+//						break;
+//					}
+//				}
+				if(currentEndState.areAllStoneCollected()) {
 					// Checking if all stones are collected and Thanos is in the same cell as ironman
 					if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.THANOS, currentEndState))
-						snaped = true;
+						newEndGameState.setSnapped();
 				}
 		}
-		return new EndGameState(nextIronManPos, killed, stonesCollected, snaped);
+		
+		//checking if the state is not equal the parent state
+		if(newEndGameState.getRawState() != currentEndState.getRawState())
+			return newEndGameState;
+		else
+			return null;
 	}
 	
 //	private boolean nextCellFree(int intendedPositionX, int intendedPositionY, boolean[] killedWarriors) {
@@ -113,7 +126,7 @@ public class EndGameProblem extends Problem  {
 	@Override
 	public boolean goalTest(State currentState) {
 		EndGameState currentEndState = (EndGameState) currentState;
-		if(currentEndState.isSnaped()) {
+		if(currentEndState.isSnapped()) {
 			return true;
 		}
 		return false;

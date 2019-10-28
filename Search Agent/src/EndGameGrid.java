@@ -6,7 +6,7 @@ public class EndGameGrid {
 	private String gridString;
 //	private ArrayList<Vector2> remaingWarriorsPos;
 //	private ArrayList<Vector2> remaingStonesPos;
-//	private Vector2 currentIronManPos;
+	private Vector2	initialIronManPos;
 //	private Vector2 thanosPos;
 
 	
@@ -31,7 +31,7 @@ public class EndGameGrid {
 		insertObjects(gridSplitted[4], EndGameCellType.WARRIOR);
 		insertObjects(gridSplitted[3], EndGameCellType.STONE);
 		insertObjects(gridSplitted[2], EndGameCellType.THANOS);
-//		insertObjects(gridSplitted[1], EndGameCellType.IRONMAN);
+		this.initialIronManPos = new Vector2(Character.getNumericValue(gridSplitted[1].charAt(0)),Character.getNumericValue(gridSplitted[1].charAt(2)));
 		
 	}
 	
@@ -85,6 +85,11 @@ public class EndGameGrid {
 		}
 	}
 	
+	public Vector2 getInitialIronManPos()
+	{
+		return initialIronManPos;
+	}
+	
 	public EndGameCellType getGridCellContent(Vector2 pos, EndGameState currentState)
 	{
 		return getGridCellContent(pos.x, pos.y, currentState);
@@ -100,10 +105,10 @@ public class EndGameGrid {
 					obj = gridCells[x][y].getContent();
 					break;	
 				case WARRIOR:
-					obj = currentState.getKilled()[gridCells[x][y].getContentIndex()]? EndGameCellType.EMPTY : EndGameCellType.WARRIOR;
+					obj = currentState.isWarriorKilled(gridCells[x][y].getContentIndex())? EndGameCellType.EMPTY : EndGameCellType.WARRIOR;
 					break;
 				case STONE:
-					obj =  currentState.getStonesCollected()[gridCells[x][y].getContentIndex()]? EndGameCellType.EMPTY : EndGameCellType.STONE;
+					obj =  currentState.isStoneCollected(gridCells[x][y].getContentIndex())? EndGameCellType.EMPTY : EndGameCellType.STONE;
 					break;				
 			}
 			return obj;
@@ -134,10 +139,10 @@ public class EndGameGrid {
 				switch(gridCells[x][y].getContent())
 				{
 					case WARRIOR:
-						empty = currentState.getKilled()[gridCells[x][y].getContentIndex()];
+						empty = currentState.isWarriorKilled(gridCells[x][y].getContentIndex());
 						break;
 					case STONE:
-						empty =  currentState.getStonesCollected()[gridCells[x][y].getContentIndex()];
+						empty =  currentState.isStoneCollected(gridCells[x][y].getContentIndex());
 						break;
 					default:
 						break;		
@@ -168,10 +173,10 @@ public class EndGameGrid {
 				switch(gridCells[x][y].getContent())
 				{
 					case WARRIOR:
-						decision = !currentState.getKilled()[gridCells[x][y].getContentIndex()];
+						decision = !currentState.isWarriorKilled(gridCells[x][y].getContentIndex());
 						break;
 					case STONE:
-						decision =  !currentState.getStonesCollected()[gridCells[x][y].getContentIndex()];
+						decision =  !currentState.isStoneCollected(gridCells[x][y].getContentIndex());
 						break;
 					default:
 						break;		
@@ -212,11 +217,11 @@ public class EndGameGrid {
 		grid.PrintGrid();
 		System.out.println("");
 		
-		EndGameState state = new EndGameState(1,2,false);
+		EndGameState state = new EndGameState();
 		System.out.println(grid.getGridCellContent(new Vector2(0, 2), state) == EndGameCellType.STONE);
 		System.out.println(!grid.isCellEmpty(new Vector2(0, 2), state));
 		System.out.println(grid.doesCellContain(new Vector2(0, 2),EndGameCellType.STONE, state));
-		state.getStonesCollected()[0] = true;
+		state.setStoneCollected(0);
 		System.out.println(grid.getGridCellContent(new Vector2(0, 2), state) == EndGameCellType.EMPTY);
 		System.out.println(grid.isCellEmpty(new Vector2(0, 2), state));
 		System.out.println(!grid.doesCellContain(new Vector2(0, 2),EndGameCellType.STONE, state));
@@ -226,18 +231,20 @@ public class EndGameGrid {
 		System.out.println(grid.getGridCellContent(new Vector2(0, 3), state) == EndGameCellType.WARRIOR);
 		System.out.println(!grid.isCellEmpty(new Vector2(0, 3), state));
 		System.out.println(grid.doesCellContain(new Vector2(0, 3),EndGameCellType.WARRIOR, state));
-		state.getKilled()[0] = true;
+		state.setWarriorKilled(0);
 		System.out.println(grid.getGridCellContent(new Vector2(0, 3), state) == EndGameCellType.EMPTY);
 		System.out.println(grid.isCellEmpty(new Vector2(0, 3), state));
 		System.out.println(!grid.doesCellContain(new Vector2(0, 3),EndGameCellType.WARRIOR, state));
 		
 
-		state = new EndGameState(1,2,false);
+		state = new EndGameState();
 		System.out.println(grid.getGridCellContent(new Vector2(3,1 ), state).getCellDamage());
 		
 		System.out.println(grid.doesCellContain(new Vector2(-1, 3),EndGameCellType.WARRIOR, state));
 		System.out.println(grid.isCellEmpty(new Vector2(-1, 3), state));
-	
+
 	}
+	
+	
 
 }

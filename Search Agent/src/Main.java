@@ -4,6 +4,11 @@ public class Main {
 	
 	//TODO Adding queueDT class implementation
 	
+	public static void main(String [] args)
+	{
+		solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "BF", false);
+	}
+	
 	public static String solve(String grid, String strategy, boolean visualize) {
 		
 		EndGameProblem problem = new EndGameProblem(grid);
@@ -44,6 +49,7 @@ public class Main {
 	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction) {
 		
 		QueueDT<Node> toBeExpandedNodes = new QueueDT<Node>();
+		VisitedStateList visitedStates = new VisitedStateList();
 		//TODO choosing between different queueing functions
 		
 		//enqueue initial state before starting the expanding process
@@ -52,14 +58,14 @@ public class Main {
 		Node currentNode = (Node) toBeExpandedNodes.poll();
 		while(currentNode != null || !problem.goalTest(currentNode.getCurrentState())) {
 
-			expand(toBeExpandedNodes, currentNode, problem, queueingFunction);
+			expand(toBeExpandedNodes, visitedStates, currentNode, problem, queueingFunction);
 			currentNode = (Node) toBeExpandedNodes.poll();
 		}
 		return currentNode;
 		
 	}
 	
-	public static void expand(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem, QueueingFunction queueingFunction){
+	public static void expand(QueueDT<Node> toBeExpandedQueueDT, VisitedStateList visitedStates, Node currentNode, Problem problem, QueueingFunction queueingFunction){
 		
 		
 		//Expanding Current Node and getting its children
@@ -68,13 +74,18 @@ public class Main {
 			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
 			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
 			
-			// Creating the new node and adding it to the front of the queue
-			// Changing the path cost function to take current node and current operator
-			childrenNodes.add(new Node(nextState, 
-											currentNode, 
-											operator,
-											currentNode.getDepth() + 1,
-											problem.pathCost(currentNode, nextState, operator)));
+			//Checking if this state is repeated
+			if(nextState != null && visitedStates.CheckState(nextState))
+			{
+				// Creating the new node and adding it to the front of the queue
+				// Changing the path cost function to take current node and current operator
+				childrenNodes.add(new Node(nextState, 
+												currentNode, 
+												operator,
+												currentNode.getDepth() + 1,
+												problem.pathCost(currentNode, nextState, operator)));
+			}
+		
 		}
 		
 		switch (queueingFunction) {
