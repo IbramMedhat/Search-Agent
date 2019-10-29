@@ -4,6 +4,8 @@ public class EndGameProblem extends Problem  {
 	
 	private EndGameGrid endGameGrid;
 	
+	
+	
 	public EndGameProblem(String grid) {
 		super();
 		this.grid = grid;
@@ -17,6 +19,7 @@ public class EndGameProblem extends Problem  {
 		initialState.setIronManPosition(endGameGrid.getInitialIronManPos());
 		
 		this.setInitialState(initialState);
+		setVisitedStates(new EndGameVisitedStateList());
 		System.out.println("Initial State: "+this.getInitialState());
 		
 	}
@@ -99,7 +102,7 @@ public class EndGameProblem extends Problem  {
 		}
 		
 		//checking if the state is not equal the parent state
-		if(newEndGameState.getRawState() != currentEndState.getRawState())
+		if(newEndGameState.getRawState() != currentEndState.getRawState() && !getVisitedStates().isStateRepeated(newEndGameState))
 			return newEndGameState;
 		else
 			return null;

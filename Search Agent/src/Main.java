@@ -65,20 +65,19 @@ public class Main {
 			toBeExpandedNodes = new QueueDT<Node>(true);
 		else
 			toBeExpandedNodes = new QueueDT<Node>(false);
-		VisitedStateList visitedStates = new VisitedStateList();
 		
 		//enqueue initial state before starting the expanding process
 		Node initialNode = new Node(problem.getInitialState(), null, '\0', 0, 0);
 		toBeExpandedNodes.add(initialNode);
 		
-		//add initial state to visitedStates
-		visitedStates.AddInitialState(problem.getInitialState());
+		//Initialzie VisitedStates
+		problem.getVisitedStates().InitializeList();
 		
 		Node currentNode = (Node) toBeExpandedNodes.poll();
 	
 		while(currentNode != null && !problem.goalTest(currentNode.getCurrentState())) {
 			if(currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT) {
-				expand(toBeExpandedNodes, visitedStates,  currentNode, problem, queueingFunction);
+				expand(toBeExpandedNodes, currentNode, problem, queueingFunction);
 //				System.out.println("Expanded!");
 			}
 			if(!toBeExpandedNodes.isEmpty())
@@ -91,7 +90,7 @@ public class Main {
 		
 	}
 	
-	public static void expand(QueueDT<Node> toBeExpandedQueueDT, VisitedStateList visitedStates, Node currentNode, Problem problem, QueueingFunction queueingFunction){
+	public static void expand(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem, QueueingFunction queueingFunction){
 		
 		
 		//Expanding Current Node and getting its children
@@ -100,7 +99,7 @@ public class Main {
 			char operator = problem.getOperators().charAt(i); //getting the current expanded operator
 			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
 			
-			if(nextState != null && !visitedStates.isStateRepeated(nextState))
+			if(nextState != null)
 			{
 				 //Creating the new node and adding it to the front of the queue
 				// Changing the path cost function to take current node and current operator

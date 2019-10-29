@@ -1,9 +1,9 @@
-import java.util.ArrayList;
-
 public abstract class Problem {
 	
 	private String operators;
 	private State initialState;
+	
+	private VisitedStateList visitedStates;
 	
 	public abstract State transitionFunction(State currentState, char operator);
 	
@@ -27,6 +27,15 @@ public abstract class Problem {
 		this.initialState = initialState;
 	}
 
+	public VisitedStateList getVisitedStates() {
+		return visitedStates;
+	}
+
+	public void setVisitedStates(VisitedStateList visitedStates) {
+		this.visitedStates = visitedStates;
+	}
+	
+	
 	
 	
 }
