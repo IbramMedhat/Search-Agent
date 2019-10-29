@@ -10,7 +10,10 @@ public abstract class Problem {
 	public abstract boolean goalTest(State currentState);
 	
 	public abstract  int pathCost(Node parentNode, State currentState, char operator);
-
+	
+	public abstract int calculateHeuristic(int functionIndex, Node currentNode);
+	
+	
 	public String getOperators() {
 		return operators;
 	}

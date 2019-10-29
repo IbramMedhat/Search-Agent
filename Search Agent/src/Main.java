@@ -7,7 +7,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "UC", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "GR1", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -60,11 +60,13 @@ public class Main {
 		
 		
 		
-		if(queueingFunction == QueueingFunction.SORTED_INSERT) {
-			toBeExpandedNodes = new PriorityQueue<Node>();
+		if(queueingFunction == QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT ||
+				queueingFunction == QueueingFunction.ENQUEUE_AT_END ||
+				queueingFunction == QueueingFunction.ENQUEUE_AT_FRONT) {
+			toBeExpandedNodes = new NormalQueue<Node>();
 		}
 		else {			
-			toBeExpandedNodes = new NormalQueue<Node>();
+			toBeExpandedNodes = new PriorityQueue<Node>();
 		}
 		
 		//Initialzie VisitedStates
@@ -140,7 +142,7 @@ public class Main {
 			orderedInsert((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 			break;	
 		case ENQUEUE_GREEDY_HEURISTIC_ONE:
-			orderedInsertGreedyOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
+			orderedInsertGreedyOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 		case ENQUEUE_GREEDY_HEURISTIC_TWO:
 			orderedInsertGreedyTwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 		case ENQUEUE_A_HEURISTIC_ONE:
@@ -172,8 +174,13 @@ public class Main {
 		}
 	}
 	
-	public static void orderedInsertGreedyOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void orderedInsertGreedyOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		//TODO queueing function according to greedy first heuristic
+		for (Node nodeToBeInserted : childrenNodes) {
+			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
+			//System.out.println(heuristicValue);
+			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
+		}
 	}
 	
 	public static void orderedInsertGreedyTwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {

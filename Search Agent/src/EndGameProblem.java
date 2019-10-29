@@ -171,4 +171,21 @@ public class EndGameProblem extends Problem  {
 		return totalDamage + parentNode.getPathCost();
 	}
 
+	@Override
+	public int calculateHeuristic(int functionIndex, Node currentNode) {
+		switch(functionIndex) {
+			case 1 : return stonesRemainingHeuristc(currentNode);
+			case 2 : return 0; //TODO Second heuristic 
+			default : return 0;
+		}
+	}
+	
+	private int stonesRemainingHeuristc(Node currentNode) {
+		int collectedStones = ((EndGameState)currentNode.getCurrentState()).CollectedStonesCount();
+		int totalCostOfCollectStones = 18;
+		int estimatedRemainingCost = totalCostOfCollectStones - 3 * collectedStones;
+		return estimatedRemainingCost;
+		
+	}
+
 }
