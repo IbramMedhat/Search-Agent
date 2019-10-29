@@ -7,7 +7,7 @@ public class EndGameGrid {
 //	private ArrayList<Vector2> remaingWarriorsPos;
 //	private ArrayList<Vector2> remaingStonesPos;
 	private Vector2	initialIronManPos;
-//	private Vector2 thanosPos;
+	private Vector2 thanosPos;
 
 	
 	public EndGameGrid(String GridString)
@@ -53,8 +53,8 @@ public class EndGameGrid {
 			index++;
 		}
 		
-//		switch(object)
-//		{
+		switch(object)
+		{
 //			case WARRIOR:
 //				remaingWarriorsPos = positions;
 //				break;
@@ -64,12 +64,12 @@ public class EndGameGrid {
 //			case STONE:
 //				remaingStonesPos = positions;
 //				break;
-//			case THANOS:
-//				thanosPos = positions.get(0);
+			case THANOS:
+				thanosPos = positions.get(0);
 //				break;
-//			default:
-//				break;		
-//		}
+			default:
+				break;		
+		}
 	}
 	
 	//Visualize the Grid
@@ -190,6 +190,7 @@ public class EndGameGrid {
 		}
 
 	}
+	
 		
 	
 //	public ArrayList<Vector2> getRemaingWarriorsPos() {
@@ -207,6 +208,10 @@ public class EndGameGrid {
 //	public Vector2 getThanosPos() {
 //		return thanosPos;
 //	}
+
+	public Vector2 getThanosPos() {
+		return thanosPos;
+	}
 
 	public static void main(String [] args)
 	{

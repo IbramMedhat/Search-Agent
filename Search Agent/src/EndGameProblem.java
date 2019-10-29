@@ -174,18 +174,35 @@ public class EndGameProblem extends Problem  {
 	@Override
 	public int calculateHeuristic(int functionIndex, Node currentNode) {
 		switch(functionIndex) {
-			case 1 : return stonesRemainingHeuristc(currentNode);
-			case 2 : return 0; //TODO Second heuristic 
+			case 1 : return cityBlockDistanceFromThanos(currentNode);
+			case 2 : return stonesRemainingHeuristic(currentNode);
 			default : return 0;
 		}
 	}
 	
-	private int stonesRemainingHeuristc(Node currentNode) {
+	private int stonesRemainingHeuristic(Node currentNode) {
 		int collectedStones = ((EndGameState)currentNode.getCurrentState()).CollectedStonesCount();
 		int totalCostOfCollectStones = 18;
 		int estimatedRemainingCost = totalCostOfCollectStones - 3 * collectedStones;
 		return estimatedRemainingCost;
 		
+	}
+	
+	@SuppressWarnings("unused")
+	private int warriorsRemainingHeurisitic(Node currentNode) {
+		int killedWarriors = ((EndGameState)currentNode.getCurrentState()).KilledWarriorsCount();
+		int totalCostOfKilledWarriors = 8;
+		int estimatedRemainingCost = totalCostOfKilledWarriors - 2 * killedWarriors;
+		return estimatedRemainingCost > 0? estimatedRemainingCost : 0;
+	}
+	
+	private int cityBlockDistanceFromThanos(Node currentNode) {
+		
+		Vector2 thanosPos = endGameGrid.getThanosPos();
+		Vector2 ironManPos = ((EndGameState)currentNode.getCurrentState()).getIronManPos();
+		int deltaX = Math.abs(thanosPos.x - ironManPos.x);
+		int deltaY = Math.abs(thanosPos.y - ironManPos.y);
+		return deltaX < deltaY ? deltaX : deltaY;
 	}
 
 }

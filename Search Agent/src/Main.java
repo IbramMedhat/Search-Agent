@@ -7,7 +7,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "GR1", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "GR2", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -32,18 +32,19 @@ public class Main {
 				goalNode = generalSearch(problem, QueueingFunction.SORTED_INSERT);break;
 				
 			case "GR1":
-				generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_ONE);break; //TODO 
+				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_ONE);break; //TODO 
 				
 			case "GR2":
-				generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_TWO);break;
+				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_TWO);break;
 			
 			case "A*1":
-				generalSearch(problem, QueueingFunction.ENQUEUE_A_HEURISTIC_ONE);break;
+				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_A_HEURISTIC_ONE);break;
 			
 			case "A*2":
-				generalSearch(problem, QueueingFunction.ENQUEUE_A_HEURISTIC_TWO);break;
+				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_A_HEURISTIC_TWO);break;
 			
 		}
+		
 		if(goalNode == null)
 			return "There is no solution";
 		else {
@@ -82,8 +83,9 @@ public class Main {
 				expand(toBeExpandedNodes, currentNode, problem, queueingFunction);
 //				System.out.println("Expanded!");
 			}
-			if(!toBeExpandedNodes.isEmpty())
+			if(!toBeExpandedNodes.isEmpty()) {
 				currentNode = (Node) toBeExpandedNodes.removeFirst();
+			}
 			else
 				currentNode = null;
 					
@@ -144,7 +146,7 @@ public class Main {
 		case ENQUEUE_GREEDY_HEURISTIC_ONE:
 			orderedInsertGreedyOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 		case ENQUEUE_GREEDY_HEURISTIC_TWO:
-			orderedInsertGreedyTwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
+			orderedInsertGreedyTwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 		case ENQUEUE_A_HEURISTIC_ONE:
 			orderedInsertAOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 		case ENQUEUE_A_HEURISTIC_TWO:
@@ -175,7 +177,6 @@ public class Main {
 	}
 	
 	public static void orderedInsertGreedyOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
-		//TODO queueing function according to greedy first heuristic
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
 			//System.out.println(heuristicValue);
@@ -183,8 +184,12 @@ public class Main {
 		}
 	}
 	
-	public static void orderedInsertGreedyTwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
-		//TODO queueing function according to greedy second heuristic
+	public static void orderedInsertGreedyTwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
+		for (Node nodeToBeInserted : childrenNodes) {
+			int heuristicValue = problem.calculateHeuristic(2, nodeToBeInserted);
+			//System.out.println(heuristicValue);
+			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
+		}
 	}
 	
 	public static void orderedInsertAOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
