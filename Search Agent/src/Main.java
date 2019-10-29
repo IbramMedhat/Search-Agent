@@ -10,7 +10,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "UC", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "DF", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {

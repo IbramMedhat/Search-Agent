@@ -2,18 +2,28 @@ import java.util.LinkedList;
 
 public class VisitedStateList {
 	
-	private LinkedList<LinkedList<LinkedList<State>>> list;
+	private LinkedList<LinkedList<LinkedList<LinkedList<LinkedList<State>>>>> list;
 	
 	public VisitedStateList()
 	{
-		this.list = new LinkedList<LinkedList<LinkedList<State>>>();
+		this.list = new LinkedList<LinkedList<LinkedList<LinkedList<LinkedList<State>>>>>();
 		
 		for(int i = 0; i < 7; i++)
 		{
-			LinkedList<LinkedList<State>> stoneList = new LinkedList<LinkedList<State>>();
+			LinkedList<LinkedList<LinkedList<LinkedList<State>>>> stoneList = new LinkedList<LinkedList<LinkedList<LinkedList<State>>>>();
 			for(int j = 0; j < 17; j++)
 			{
-				stoneList.add(new LinkedList<State>());
+				LinkedList<LinkedList<LinkedList<State>>> monsterList = new LinkedList<LinkedList<LinkedList<State>>>();
+				for(int k = 0; k < 5; k++)
+				{
+					LinkedList<LinkedList<State>> xCordList = new LinkedList<LinkedList<State>>(); 
+					for(int w = 0; w < 5; w++)
+					{						
+						xCordList.add(new LinkedList<State>());
+					}
+					monsterList.add(xCordList);
+				}
+				stoneList.add(monsterList);
 			}
 			list.add(stoneList);
 		}
@@ -21,7 +31,9 @@ public class VisitedStateList {
 	public void AddInitialState(State state) {
 		if(list.size() == 0)
 		{
-			list.get(0).get(0).add(state);
+			int ModX = ((EndGameState)state).getIronManPos().x % 5;
+			int ModY = ((EndGameState)state).getIronManPos().y % 5;
+			list.get(0).get(0).get(ModX).get(ModY).add(state);
 		}
 	}
 	public boolean isStateRepeated(State state)
@@ -29,7 +41,10 @@ public class VisitedStateList {
 		int foundState = 0;
 		int stoneListIndex = ((EndGameState)state).CollectedStonesCount();
 		int monsterListIndex = ((EndGameState)state).KilledWarriorsCount();
-		LinkedList<State> searchList = list.get(stoneListIndex).get(monsterListIndex);
+		Vector2 pos = ((EndGameState)state).getIronManPos();
+		int ModX = pos.x % 5;
+		int ModY = pos.y % 5;
+		LinkedList<State> searchList = list.get(stoneListIndex).get(monsterListIndex).get(ModX).get(ModY);
 		foundState = findStateBinarySearch(state.getRawState(), searchList);
 		if(foundState == -1) {
 			searchList.addLast(state);
