@@ -10,7 +10,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "BF", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "DF", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -68,7 +68,6 @@ public class Main {
 		else
 			toBeExpandedNodes = new QueueDT<Node>(false);
 		VisitedStateList visitedStates = new VisitedStateList();
-		//TODO choosing between different queueing functions
 		
 		//enqueue initial state before starting the expanding process
 		Node initialNode = new Node(problem.getInitialState(), null, '\0', 0, 0);
@@ -230,7 +229,7 @@ public class Main {
 	
 	public static String ComputeOutput(Node goalNode)
 	{
-		Node currentNode = goalNode.getParentNode();
+		Node currentNode = goalNode;
 		String operators = "";
 		String states = "";
 		int pathCost = goalNode.getPathCost();
@@ -262,7 +261,12 @@ public class Main {
 			default:
 				break;
 			}
-			operators = ","+operator+operators;
+			if(currentNode.getParentNode() == null || currentNode.getParentNode().getParentNode() == null) {
+				operators = operator+operators;
+			}
+			else {
+				operators = ","+operator+operators;
+			}
 			states = currentNode.getCurrentState()+"\n"+states;
 			currentNode = currentNode.getParentNode();
 		}
