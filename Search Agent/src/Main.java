@@ -7,7 +7,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "GR2", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "A*2", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -148,9 +148,9 @@ public class Main {
 		case ENQUEUE_GREEDY_HEURISTIC_TWO:
 			orderedInsertGreedyTwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 		case ENQUEUE_A_HEURISTIC_ONE:
-			orderedInsertAOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
+			orderedInsertAOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 		case ENQUEUE_A_HEURISTIC_TWO:
-			orderedInsertATwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
+			orderedInsertATwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 		default:
 			break;	
 		}
@@ -192,12 +192,20 @@ public class Main {
 		}
 	}
 	
-	public static void orderedInsertAOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
-		//TODO queueing function according to A* first heuristic
+	public static void orderedInsertAOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
+		for (Node nodeToBeInserted : childrenNodes) {
+			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
+			//System.out.println(heuristicValue);
+			toBeExpandedQueueDT.insertAt(heuristicValue + nodeToBeInserted.getPathCost(), nodeToBeInserted);
+		}
 	}
 	
-	public static void orderedInsertATwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
-		//TODO queueing function according to A* first heuristic
+	public static void orderedInsertATwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
+		for (Node nodeToBeInserted : childrenNodes) {
+			int heuristicValue = problem.calculateHeuristic(2, nodeToBeInserted);
+			//System.out.println(heuristicValue);
+			toBeExpandedQueueDT.insertAt(heuristicValue + nodeToBeInserted.getPathCost(), nodeToBeInserted);
+		}
 	}
 			
 //	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
