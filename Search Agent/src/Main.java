@@ -32,7 +32,7 @@ public class Main {
 				goalNode = generalSearch(problem, QueueingFunction.SORTED_INSERT);break;
 				
 			case "GR1":
-				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_ONE);break; //TODO 
+				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_ONE);break;
 				
 			case "GR2":
 				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_TWO);break;
@@ -212,7 +212,6 @@ public class Main {
 	}
 			
 //	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
-//		//TODO ordered insertion based on each node path cost
 //		boolean inserted = false;
 //		for (Node nodeToBeInserted : childrenNodes) {
 //			inserted = false;
