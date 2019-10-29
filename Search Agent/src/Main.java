@@ -7,7 +7,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "A*2", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "A*1", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -133,7 +133,6 @@ public class Main {
 		
 		switch (queueingFunction) {
 		case ENQUEUE_AT_END:
-//			System.out.println("children Nodes Size : " + childrenNodes.size());
 			enqueueAtEnd((NormalQueue<Node>)toBeExpandedQueue, childrenNodes);
 			break;
 		case ENQUEUE_AT_FRONT_WITH_LIMIT:
@@ -145,12 +144,16 @@ public class Main {
 			break;	
 		case ENQUEUE_GREEDY_HEURISTIC_ONE:
 			orderedInsertGreedyOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
+			break;
 		case ENQUEUE_GREEDY_HEURISTIC_TWO:
 			orderedInsertGreedyTwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
+			break;
 		case ENQUEUE_A_HEURISTIC_ONE:
 			orderedInsertAOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
+			break;
 		case ENQUEUE_A_HEURISTIC_TWO:
 			orderedInsertATwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
+			break;
 		default:
 			break;	
 		}
