@@ -1,16 +1,13 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Main {
-	
-	//TODO Adding queueDT class implementation
-	
+		
 	public static int lastPrint = 0;
 	public static int expandedNodes = 0;
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "ID", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "UC", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -59,21 +56,24 @@ public class Main {
 	
 	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction, int depthLimit) {
 		
-		QueueDT<Node> toBeExpandedNodes;
+		Queue<Node> toBeExpandedNodes = null;
 		
-		if(queueingFunction == QueueingFunction.SORTED_INSERT)
-			toBeExpandedNodes = new QueueDT<Node>(true);
-		else
-			toBeExpandedNodes = new QueueDT<Node>(false);
 		
-		//enqueue initial state before starting the expanding process
-		Node initialNode = new Node(problem.getInitialState(), null, '\0', 0, 0);
-		toBeExpandedNodes.add(initialNode);
+		
+		if(queueingFunction == QueueingFunction.SORTED_INSERT) {
+			toBeExpandedNodes = new PriorityQueue<Node>();
+		}
+		else {			
+			toBeExpandedNodes = new NormalQueue<Node>();
+		}
 		
 		//Initialzie VisitedStates
 		problem.getVisitedStates().InitializeList();
 		
-		Node currentNode = (Node) toBeExpandedNodes.poll();
+		//enqueue initial state before starting the expanding process
+		Node initialNode = new Node(problem.getInitialState(), null, '\0', 0, 0);
+		
+		Node currentNode = initialNode;
 	
 		while(currentNode != null && !problem.goalTest(currentNode.getCurrentState())) {
 			if(currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT) {
@@ -81,7 +81,7 @@ public class Main {
 //				System.out.println("Expanded!");
 			}
 			if(!toBeExpandedNodes.isEmpty())
-				currentNode = (Node) toBeExpandedNodes.poll();
+				currentNode = (Node) toBeExpandedNodes.removeFirst();
 			else
 				currentNode = null;
 					
@@ -90,7 +90,7 @@ public class Main {
 		
 	}
 	
-	public static void expand(QueueDT<Node> toBeExpandedQueueDT, Node currentNode, Problem problem, QueueingFunction queueingFunction){
+	public static void expand(Queue<Node> toBeExpandedQueue, Node currentNode, Problem problem, QueueingFunction queueingFunction){
 		
 		
 		//Expanding Current Node and getting its children
@@ -130,23 +130,23 @@ public class Main {
 		switch (queueingFunction) {
 		case ENQUEUE_AT_END:
 //			System.out.println("children Nodes Size : " + childrenNodes.size());
-			enqueueAtEnd(toBeExpandedQueueDT, childrenNodes);
+			enqueueAtEnd((NormalQueue<Node>)toBeExpandedQueue, childrenNodes);
 			break;
 		case ENQUEUE_AT_FRONT_WITH_LIMIT:
 		case ENQUEUE_AT_FRONT:
-			enqueueAtFront(toBeExpandedQueueDT, childrenNodes);
+			enqueueAtFront((NormalQueue<Node>)toBeExpandedQueue, childrenNodes);
 			break;
 		case SORTED_INSERT:
-			orderedInsert(toBeExpandedQueueDT, childrenNodes);
+			orderedInsert((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 			break;	
 		case ENQUEUE_GREEDY_HEURISTIC_ONE:
-			orderedInsertGreedyOne(toBeExpandedQueueDT, childrenNodes);
+			orderedInsertGreedyOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 		case ENQUEUE_GREEDY_HEURISTIC_TWO:
-			orderedInsertGreedyTwo(toBeExpandedQueueDT, childrenNodes);
+			orderedInsertGreedyTwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 		case ENQUEUE_A_HEURISTIC_ONE:
-			orderedInsertAOne(toBeExpandedQueueDT, childrenNodes);
+			orderedInsertAOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 		case ENQUEUE_A_HEURISTIC_TWO:
-			orderedInsertATwo(toBeExpandedQueueDT, childrenNodes);
+			orderedInsertATwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 		default:
 			break;	
 		}
@@ -154,40 +154,37 @@ public class Main {
 		
 	}
 
-	public static void enqueueAtFront(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void enqueueAtFront(NormalQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		for (Node node : childrenNodes) {
 			toBeExpandedQueueDT.addFirst(node);
-			
 		}
 	}
 	
-	public static void enqueueAtEnd(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void enqueueAtEnd(NormalQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		for (Node node : childrenNodes) {
-			toBeExpandedQueueDT.add(node);
-//			System.out.println("Queue Size: "+toBeExpandedQueueDT.size());
+			toBeExpandedQueueDT.addLast(node);
 		}
 	}
 	
-	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
-//		boolean inserted = false;
+	public static void orderedInsert(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			toBeExpandedQueueDT.insertAt(nodeToBeInserted.getPathCost(), nodeToBeInserted);
 		}
 	}
 	
-	public static void orderedInsertGreedyOne(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void orderedInsertGreedyOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		//TODO queueing function according to greedy first heuristic
 	}
 	
-	public static void orderedInsertGreedyTwo(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void orderedInsertGreedyTwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		//TODO queueing function according to greedy second heuristic
 	}
 	
-	public static void orderedInsertAOne(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void orderedInsertAOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		//TODO queueing function according to A* first heuristic
 	}
 	
-	public static void orderedInsertATwo(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void orderedInsertATwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		//TODO queueing function according to A* first heuristic
 	}
 			

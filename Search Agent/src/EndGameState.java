@@ -1,12 +1,4 @@
-import java.util.ArrayList;
-
 public class EndGameState extends State {
-	private Vector2 ironManPos;
-	private boolean snaped;
-	private boolean[] killed;
-	private boolean[] stonesCollected; 
-	
-	
 	
 	public EndGameState()
 	{
@@ -108,15 +100,15 @@ public class EndGameState extends State {
 	    
 	}
 	
-	private String loopBits(int offset, int size)
-	{
-		String result = "";
-		for(int i = size - 1 ; i > -1 ; i--)
-		{
-			 result = result + ((state & (1<<i+offset))>>(i+offset)) +",";
-		}
-		return result;
-	}
+//	private String loopBits(int offset, int size)
+//	{
+//		String result = "";
+//		for(int i = size - 1 ; i > -1 ; i--)
+//		{
+//			 result = result + ((state & (1<<i+offset))>>(i+offset)) +",";
+//		}
+//		return result;
+//	}
 	
 	private int SumloopBits(int offset, int size)
 	{

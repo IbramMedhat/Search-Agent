@@ -45,7 +45,6 @@ public class EndGameVisitedStateList extends VisitedStateList{
 	}
 	public boolean isStateRepeated(State state)
 	{
-		int foundState = 0;
 		int stoneListIndex = ((EndGameState)state).CollectedStonesCount();
 		int monsterListIndex = ((EndGameState)state).KilledWarriorsCount();
 		Vector2 pos = ((EndGameState)state).getIronManPos();
@@ -91,7 +90,8 @@ public class EndGameVisitedStateList extends VisitedStateList{
 		return false;
 	}
 	
-	 private int findStateBinarySearch(int x, LinkedList<State> searchList) 
+	 @SuppressWarnings("unused")
+	private int findStateBinarySearch(int x, LinkedList<State> searchList) 
      { 
          int l = 0, r = searchList.size() - 1; 
          int finalIndex = 0;
