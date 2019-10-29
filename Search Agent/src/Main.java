@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Main {
 	
@@ -9,7 +10,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "ID", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "UC", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -69,7 +70,7 @@ public class Main {
 	
 	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction, int depthLimit) {
 		
-		QueueDT<Node> toBeExpandedNodes = new QueueDT<Node>();
+		QueueDT<Node> toBeExpandedNodes = new QueueDT<Node>();		
 		VisitedStateList visitedStates = new VisitedStateList();
 		//TODO choosing between different queueing functions
 		
@@ -168,26 +169,58 @@ public class Main {
 //			System.out.println("Queue Size: "+toBeExpandedQueueDT.size());
 		}
 	}
-	
+		
 	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		//TODO ordered insertion based on each node path cost
 		boolean inserted = false;
 		for (Node nodeToBeInserted : childrenNodes) {
 			inserted = false;
 			int currentCost = nodeToBeInserted.getPathCost();
-			for(int i = 0; i < toBeExpandedQueueDT.size(); i++)
-			{
-				Node queueNode = (Node) toBeExpandedQueueDT.getItem(i);
-				if(queueNode.getPathCost() > currentCost)
-				{
-					toBeExpandedQueueDT.insertAt(i, nodeToBeInserted);
-					inserted = true;
-					break;
-				}
-			}
+			
+			int x = currentCost + 1;
+	        int l = 0, r = toBeExpandedQueueDT.size() - 1;
+	        int finalM = -1;
+	        while (l <= r) { 
+	            int m = l + (r - l) / 2; 
+	           
+	            // Check if x is present at mid 
+	            if (((Node)toBeExpandedQueueDT.getItem(m)).getPathCost() == x) {	            	
+	            	if(m-1 > 0)
+	            	{
+	            		toBeExpandedQueueDT.insertAt(m-1, nodeToBeInserted);
+	            		inserted = true;
+	            	}
+	            	break;
+	            }
+	 
+	            // If x greater, ignore left half 
+	            if ( ((Node)toBeExpandedQueueDT.getItem(m)).getPathCost()  < x)
+	                l = m + 1; 
+	 
+	            // If x is smaller, ignore right half 
+	            else
+	                r = m - 1; 
+	            
+	            finalM = m;
+	        } 
+//			for(int i = 0; i < toBeExpandedQueueDT.size(); i++)
+//			{
+//				Node queueNode = (Node) toBeExpandedQueueDT.getItem(i);
+//				if(queueNode.getPathCost() > currentCost)
+//				{
+//					toBeExpandedQueueDT.insertAt(i, nodeToBeInserted);
+//					inserted = true;
+//					break;
+//				}
+//			}
 			// if the queue is empty or if nodeToBeInserted Cost is greater than all the queues' nodes
 			if(!inserted)
-				toBeExpandedQueueDT.add(nodeToBeInserted);
+			{
+				if(finalM == -1)
+					toBeExpandedQueueDT.add(nodeToBeInserted);
+				else
+					toBeExpandedQueueDT.insertAt(finalM, nodeToBeInserted);
+			}
 		}
 		
 	}
