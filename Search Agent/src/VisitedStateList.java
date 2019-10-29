@@ -45,36 +45,43 @@ public class VisitedStateList {
 		int ModX = pos.x % 5;
 		int ModY = pos.y % 5;
 		LinkedList<State> searchList = list.get(stoneListIndex).get(monsterListIndex).get(ModX).get(ModY);
-		foundState = findStateBinarySearch(state.getRawState(), searchList);
-		if(foundState == -1) {
-			searchList.addLast(state);
-			return false;
-		}
-		else if(foundState == 0)
+		if(findStateLinearSearch(state.getRawState(), searchList))
 		{
-			searchList.addFirst(state);
+			return true;
+		}
+		else
+		{
+			searchList.add(state);
 			return false;
 		}
-		else if(searchList.get(foundState).getRawState() != state.getRawState())
-		{				
-			searchList.add(foundState, state);
-			return false;
-		}
-		return true;
+//		foundState = findStateLinearSearch(state.getRawState(), searchList);
+//		if(foundState == -1) {
+//			searchList.addLast(state);
+//			return false;
+//		}
+//		else if(foundState == 0)
+//		{
+//			searchList.addFirst(state);
+//			return false;
+//		}
+//		else if(searchList.get(foundState).getRawState() != state.getRawState())
+//		{				
+//			searchList.add(foundState, state);
+//			return false;
+//		}
+//		return true;
 	}
 	
-	private int findStateLinearSearch(int x, LinkedList<State> searchList)
+	private boolean findStateLinearSearch(int x, LinkedList<State> searchList)
 	{
-		int index = -1;
 		for (int i = 0; i < searchList.size(); i++) {
 			
-			if(searchList.get(i).getRawState() >= x)
+			if(searchList.get(i).getRawState() == x)
 			{
-				index = i;
-				break;
+				return true;
 			}
 		}
-		return index;
+		return false;
 	}
 	
 	 private int findStateBinarySearch(int x, LinkedList<State> searchList) 
@@ -152,9 +159,15 @@ public class VisitedStateList {
 		
 		EndGameState state1 = new EndGameState(0);
 		EndGameState state2 = new EndGameState(0);
-		EndGameState state3 = new EndGameState(2);
+		EndGameState state3 = new EndGameState(0);
 		
-		state2.setStoneCollected(0);
+//		state2.setStoneCollected(0);
+		state1.setIronManPosition(new Vector2(1,3));
+		state2.setIronManPosition(new Vector2(1,3));
+		state3.setIronManPosition(new Vector2(1,3));
+		
+		System.out.println(state1.getIronManPos().x % 5);
+		System.out.println(state1.getIronManPos().y % 5);
 		
 		list.isStateRepeated(state1);
 		list.isStateRepeated(state2);

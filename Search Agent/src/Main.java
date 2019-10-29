@@ -10,7 +10,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "DF", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "BF", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -51,17 +51,8 @@ public class Main {
 			return "There is no solution";
 		else {
 			//TODO return sequence of operators leading to this goal node
-			Node currentNode = goalNode;
-			String operators = "";
-			String states = "";
-			String pathCost = "Path Cost: "+goalNode.getPathCost();
-			while(currentNode != null) {
-				operators = ","+currentNode.getOperator() + operators;
-				states = currentNode.getCurrentState()+"\n"+states;
-				currentNode = currentNode.getParentNode();
-			}
-			operators = "Solution:"+operators+"\n"+states+pathCost;
-			return operators;
+			
+			return ComputeOutput(goalNode);
 		}
 	}
 	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction) {
@@ -81,7 +72,6 @@ public class Main {
 		
 		//enqueue initial state before starting the expanding process
 		Node initialNode = new Node(problem.getInitialState(), null, '\0', 0, 0);
-		System.out.println(initialNode);
 		toBeExpandedNodes.add(initialNode);
 		
 		//add initial state to visitedStates
@@ -89,7 +79,6 @@ public class Main {
 		
 		Node currentNode = (Node) toBeExpandedNodes.poll();
 	
-		System.out.println(toBeExpandedNodes.isEmpty());
 		while(currentNode != null && !problem.goalTest(currentNode.getCurrentState())) {
 			if(currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT) {
 				expand(toBeExpandedNodes, visitedStates,  currentNode, problem, queueingFunction);
@@ -126,12 +115,12 @@ public class Main {
 				expandedNodes++;
 				//Checking if this state is repeated
 				
-				if(expandedNodes/ 500 > lastPrint){
-					
-					System.out.println(expandedNodes);
-					lastPrint++;
-				}
-				
+//				if(expandedNodes/ 500 > lastPrint){
+//					
+//					System.out.println(expandedNodes);
+//					lastPrint++;
+//				}
+//				
 				
 				childrenNodes.add(new Node(nextState, 
 												currentNode, 
@@ -177,13 +166,13 @@ public class Main {
 	
 	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		//TODO ordered insertion based on each node path cost
-		boolean inserted = false;
+//		boolean inserted = false;
 		for (Node nodeToBeInserted : childrenNodes) {
 			toBeExpandedQueueDT.insertAt(nodeToBeInserted.getPathCost(), nodeToBeInserted);
 		}
 		
 	}
-		
+			
 //	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 //		//TODO ordered insertion based on each node path cost
 //		boolean inserted = false;
@@ -238,6 +227,47 @@ public class Main {
 //		}
 //		
 //	}
+	
+	public static String ComputeOutput(Node goalNode)
+	{
+		Node currentNode = goalNode.getParentNode();
+		String operators = "";
+		String states = "";
+		int pathCost = goalNode.getPathCost();
+		while(currentNode != null) {
+			String operator = "";
+			switch (currentNode.getOperator()) {
+			case 'U':
+				operator = "up";
+				break;
+			case 'D':
+				operator = "down";
+				break;
+			case 'R':
+				operator = "right";
+				break;
+			case 'L':
+				operator = "left";
+				break;
+			case 'K':
+				operator = "kill";
+				break;
+			case 'C':
+				operator = "collect";
+				break;
+			case 'S':
+				operator = "snap";
+				break;
+				
+			default:
+				break;
+			}
+			operators = ","+operator+operators;
+			states = currentNode.getCurrentState()+"\n"+states;
+			currentNode = currentNode.getParentNode();
+		}
+		return operators+";"+pathCost+";"+expandedNodes;
+	}
 	
 }
 
