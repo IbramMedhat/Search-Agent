@@ -10,7 +10,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "ID", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "GR1", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -61,7 +61,11 @@ public class Main {
 		
 		QueueDT<Node> toBeExpandedNodes;
 		
-		if(queueingFunction == QueueingFunction.SORTED_INSERT)
+		if(queueingFunction == QueueingFunction.SORTED_INSERT 
+				|| queueingFunction == QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_ONE
+				|| queueingFunction == QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_TWO
+				|| queueingFunction == QueueingFunction.ENQUEUE_A_HEURISTIC_ONE
+				|| queueingFunction == QueueingFunction.ENQUEUE_A_HEURISTIC_TWO)
 			toBeExpandedNodes = new QueueDT<Node>(true);
 		else
 			toBeExpandedNodes = new QueueDT<Node>(false);
@@ -140,7 +144,7 @@ public class Main {
 			orderedInsert(toBeExpandedQueueDT, childrenNodes);
 			break;	
 		case ENQUEUE_GREEDY_HEURISTIC_ONE:
-			orderedInsertGreedyOne(toBeExpandedQueueDT, childrenNodes);
+			orderedInsertGreedyOne(problem, toBeExpandedQueueDT, childrenNodes);
 		case ENQUEUE_GREEDY_HEURISTIC_TWO:
 			orderedInsertGreedyTwo(toBeExpandedQueueDT, childrenNodes);
 		case ENQUEUE_A_HEURISTIC_ONE:
@@ -175,8 +179,13 @@ public class Main {
 		}
 	}
 	
-	public static void orderedInsertGreedyOne(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void orderedInsertGreedyOne(Problem problem,QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		//TODO queueing function according to greedy first heuristic
+		for (Node nodeToBeInserted : childrenNodes) {
+			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
+			//System.out.println(heuristicValue);
+			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
+		}
 	}
 	
 	public static void orderedInsertGreedyTwo(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
