@@ -10,7 +10,7 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "DF", false));
+		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "ID", false));
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
@@ -34,24 +34,22 @@ public class Main {
 			case "UC":
 				goalNode = generalSearch(problem, QueueingFunction.SORTED_INSERT);break;
 				
-//			case "GR1":
-//				generalSearch(problem, "enqueueAtEnd");break; //TODO 
-//				
-//			case "GR2":
-//				generalSearch(problem, "enqueueAtEnd");break;
-//			
-//			case "A*1":
-//				generalSearch(problem, "enqueueAtEnd");break;
-//			
-//			case "A*2":
-//				generalSearch(problem, "enqueueAtEnd");break;
-//			
+			case "GR1":
+				generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_ONE);break; //TODO 
+				
+			case "GR2":
+				generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_TWO);break;
+			
+			case "A*1":
+				generalSearch(problem, QueueingFunction.ENQUEUE_A_HEURISTIC_ONE);break;
+			
+			case "A*2":
+				generalSearch(problem, QueueingFunction.ENQUEUE_A_HEURISTIC_TWO);break;
+			
 		}
 		if(goalNode == null)
 			return "There is no solution";
 		else {
-			//TODO return sequence of operators leading to this goal node
-			
 			return ComputeOutput(goalNode);
 		}
 	}
@@ -141,7 +139,15 @@ public class Main {
 			break;
 		case SORTED_INSERT:
 			orderedInsert(toBeExpandedQueueDT, childrenNodes);
-			break;
+			break;	
+		case ENQUEUE_GREEDY_HEURISTIC_ONE:
+			orderedInsertGreedyOne(toBeExpandedQueueDT, childrenNodes);
+		case ENQUEUE_GREEDY_HEURISTIC_TWO:
+			orderedInsertGreedyTwo(toBeExpandedQueueDT, childrenNodes);
+		case ENQUEUE_A_HEURISTIC_ONE:
+			orderedInsertAOne(toBeExpandedQueueDT, childrenNodes);
+		case ENQUEUE_A_HEURISTIC_TWO:
+			orderedInsertATwo(toBeExpandedQueueDT, childrenNodes);
 		default:
 			break;	
 		}
@@ -164,12 +170,26 @@ public class Main {
 	}
 	
 	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
-		//TODO ordered insertion based on each node path cost
 //		boolean inserted = false;
 		for (Node nodeToBeInserted : childrenNodes) {
 			toBeExpandedQueueDT.insertAt(nodeToBeInserted.getPathCost(), nodeToBeInserted);
 		}
-		
+	}
+	
+	public static void orderedInsertGreedyOne(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+		//TODO queueing function according to greedy first heuristic
+	}
+	
+	public static void orderedInsertGreedyTwo(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+		//TODO queueing function according to greedy second heuristic
+	}
+	
+	public static void orderedInsertAOne(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+		//TODO queueing function according to A* first heuristic
+	}
+	
+	public static void orderedInsertATwo(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+		//TODO queueing function according to A* first heuristic
 	}
 			
 //	public static void orderedInsert(QueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
