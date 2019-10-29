@@ -38,7 +38,7 @@ public class PriorityQueue<E> implements Queue<E>{
 	{
 		if(sortedQueue.get(i).add(e))
 		{
-			minimumIndex = i < minimumIndex? i : minimumIndex;
+			minimumIndex = elementCount == 0 || i < minimumIndex? i : minimumIndex;
 			elementCount++;
 			return true;
 		}
