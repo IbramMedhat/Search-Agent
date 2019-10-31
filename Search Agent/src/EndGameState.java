@@ -37,6 +37,7 @@ public class EndGameState extends State {
 	public void setIronManPosition(int x, int y)
 	{
 		state = 0xFF00FFFF & state;
+		
 		state = (((x<<4) | y) << 16 ) | state;
 	}
 	
@@ -45,7 +46,8 @@ public class EndGameState extends State {
 		
 		state = 0xFF00FFFF & state;
 		
-		state = (pos.rawPosition() << 16 ) | state;
+		state = (pos.x << 20 ) | state;
+		state = (pos.y << 16 ) | state;
 	}
 	
 	public boolean areAllStoneCollected()
@@ -89,26 +91,26 @@ public class EndGameState extends State {
 		
 		Vector2 pos = this.getIronManPos();
 		boolean snaped = this.isSnapped();
-//		String stones = "Stones: ("+ loopBits(24, 6) + "), ";
-//		String warriors = "Warriors: ("+ loopBits(0, 16) + ") ";
-//	    return "Pos: "+pos+", Snapped: "+snaped+", "+stones+warriors;
-		
+		String stones = "Stones: ("+loopBits(24, 6) +" :"+SumloopBits(24,6)+") ";
+		String warriors = "Warriors: ("+loopBits(0, 16)+" :"+ SumloopBits(0,16)+") ";
+	    return "Pos: "+pos+", Snapped: "+snaped+", "+stones+warriors;
+//		return loopBits(24,8) +" "+loopBits(16,8) +" "+loopBits(8,8) +" "+loopBits(0,8) +" ";
 		
 		//if you want to print sums only
-		return pos+" "+snaped+" S:"+SumloopBits(24,6)+"  W:"+SumloopBits(0,5);
+//		return pos+" "+snaped+" S:"+SumloopBits(24,6)+"  W:"+SumloopBits(0,5);
 		
 	    
 	}
 	
-//	private String loopBits(int offset, int size)
-//	{
-//		String result = "";
-//		for(int i = size - 1 ; i > -1 ; i--)
-//		{
-//			 result = result + ((state & (1<<i+offset))>>(i+offset)) +",";
-//		}
-//		return result;
-//	}
+	private String loopBits(int offset, int size)
+	{
+		String result = "";
+		for(int i = size - 1 ; i > -1 ; i--)
+		{
+			 result = result + ((state & (1<<i+offset))>>(i+offset)) +",";
+		}
+		return result;
+	}
 	
 	private int SumloopBits(int offset, int size)
 	{

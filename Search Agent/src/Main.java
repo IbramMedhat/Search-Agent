@@ -7,10 +7,19 @@ public class Main {
 	
 	public static void main(String [] args)
 	{
-		System.out.println(solve("5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3", "A*1", false));
+//		String[] st = {"BF","DF","UC","ID","GR1","GR2","A*1","A*2"};
+//		for (String string : st) {
+//			System.out.println(solve("15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11,10,0", string, false));
+//			System.out.println("");
+//		}
+		
+		System.out.println(solve("15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11,10,0", "BF", false));
+		
 	}
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
+		
+		Long startTime = System.currentTimeMillis();
 		
 		EndGameProblem problem = new EndGameProblem(grid);
 		Node goalNode = null;
@@ -45,6 +54,7 @@ public class Main {
 			
 		}
 		
+		System.out.println("Execution Time of "+strategy+": "+((float)(System.currentTimeMillis() - startTime)) / 1000f+" seconds");
 		if(goalNode == null)
 			return "There is no solution";
 		else {
@@ -115,12 +125,12 @@ public class Main {
 				expandedNodes++;
 				//Checking if this state is repeated
 				
-//				if(expandedNodes/ 500 > lastPrint){
+//				if(expandedNodes/ 5000 > lastPrint){
 //					
 //					System.out.println(expandedNodes);
 //					lastPrint++;
 //				}
-//				
+				
 				
 				childrenNodes.add(new Node(nextState, 
 												currentNode, 

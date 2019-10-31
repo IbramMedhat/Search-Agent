@@ -20,10 +20,10 @@ public class EndGameVisitedStateList extends VisitedStateList{
 			for(int j = 0; j < 17; j++)
 			{
 				LinkedList<LinkedList<LinkedList<State>>> monsterList = new LinkedList<LinkedList<LinkedList<State>>>();
-				for(int k = 0; k < 5; k++)
+				for(int k = 0; k < 16; k++)
 				{
 					LinkedList<LinkedList<State>> xCordList = new LinkedList<LinkedList<State>>(); 
-					for(int w = 0; w < 5; w++)
+					for(int w = 0; w < 16; w++)
 					{						
 						xCordList.add(new LinkedList<State>());
 					}
@@ -38,25 +38,31 @@ public class EndGameVisitedStateList extends VisitedStateList{
 	public void AddInitialState(State state) {
 		if(list.size() == 0)
 		{
-			int ModX = ((EndGameState)state).getIronManPos().x % 5;
-			int ModY = ((EndGameState)state).getIronManPos().y % 5;
+			int ModX = ((EndGameState)state).getIronManPos().x % 16;
+			int ModY = ((EndGameState)state).getIronManPos().y % 16;
 			list.get(0).get(0).get(ModX).get(ModY).add(state);
 		}
+		System.out.println(list.size()+","+list.get(0).size()+","+list.get(0).get(0).size()+","+list.get(0).get(0).get(0).size()+","+list.get(0).get(0).get(0).get(0).size());
 	}
 	public boolean isStateRepeated(State state)
 	{
 		int stoneListIndex = ((EndGameState)state).CollectedStonesCount();
 		int monsterListIndex = ((EndGameState)state).KilledWarriorsCount();
 		Vector2 pos = ((EndGameState)state).getIronManPos();
-		int ModX = pos.x % 5;
-		int ModY = pos.y % 5;
+		int ModX = pos.x % 16;
+		int ModY = pos.y % 16;
+		
 		LinkedList<State> searchList = list.get(stoneListIndex).get(monsterListIndex).get(ModX).get(ModY);
+//		if(ModX == 12 && ModY == 16) {
+//			System.out.println(searchList);
+//		}
 		if(findStateLinearSearch(state.getRawState(), searchList))
-		{
+		{			
 			return true;
 		}
 		else
 		{
+//			System.out.println(state.getRawState()+","+stoneListIndex+","+monsterListIndex+","+pos);
 			searchList.add(state);
 			return false;
 		}
@@ -80,14 +86,31 @@ public class EndGameVisitedStateList extends VisitedStateList{
 	
 	private boolean findStateLinearSearch(int x, LinkedList<State> searchList)
 	{
-		for (int i = 0; i < searchList.size(); i++) {
-			
-			if(searchList.get(i).getRawState() == x)
+//		for (int i = 0; i < searchList.size(); i++) {
+//			
+//			if(searchList.get(i).getRawState() - x == 0)
+//			{
+//				if(i > 100)
+////					System.out.println(((EndGameState)searchList.get(i)).getRawState());
+//				return true;
+//			}
+//		}
+		boolean found = false;
+//		if(searchList.size() > 2)
+//			return true;
+		
+		for (State state : searchList) {
+			if(state.getRawState() == x)
 			{
-				return true;
+				if(searchList.size() > 200)
+				{
+					System.out.println(searchList);
+				}
+				found = true;
+				break;
 			}
 		}
-		return false;
+		return found;
 	}
 	
 	 @SuppressWarnings("unused")

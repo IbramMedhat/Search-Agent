@@ -19,7 +19,9 @@ public class EndGameGrid {
 	private void InitializeGrid()
 	{
 		String[] gridSplitted = gridString.split(";");
-		gridCells = new EndGameCell[Character.getNumericValue(gridSplitted[0].charAt(2))][Character.getNumericValue(gridSplitted[0].charAt(0))];
+		int gridWidth = Integer.parseInt((((gridSplitted[0]).split(","))[0]));
+		int gridLength = Integer.parseInt((((gridSplitted[0]).split(","))[1]));
+		gridCells = new EndGameCell[gridLength][gridWidth];
 
 		for (int i = 0; i < gridCells.length; i++)
 		{
@@ -31,7 +33,7 @@ public class EndGameGrid {
 		insertObjects(gridSplitted[4], EndGameCellType.WARRIOR);
 		insertObjects(gridSplitted[3], EndGameCellType.STONE);
 		insertObjects(gridSplitted[2], EndGameCellType.THANOS);
-		this.initialIronManPos = new Vector2(Character.getNumericValue(gridSplitted[1].charAt(0)),Character.getNumericValue(gridSplitted[1].charAt(2)));
+		this.initialIronManPos = new Vector2(Integer.parseInt(gridSplitted[1].split(",")[0]),Integer.parseInt(gridSplitted[1].split(",")[0]));
 		
 	}
 	
@@ -41,12 +43,13 @@ public class EndGameGrid {
 		int stringLength = posString.length();
 		ArrayList<Vector2> positions = new ArrayList<Vector2>();
 		int index = 0;
-		for (int i = 0; i < stringLength - 2; i+=4)
+		
+		String[]  splitedString = posString.split(",");
+		for (int i = 0; i < splitedString.length - 1; i+=2)
 		{
-			int xCord = Character.getNumericValue(posString.charAt(i));
-			int yCord = Character.getNumericValue(posString.charAt(i+2));
+			int xCord = Integer.parseInt(splitedString[i]);
+			int yCord = Integer.parseInt(splitedString[i+1]);
 			
-
 			gridCells[xCord][yCord].setCellContent(object, index);
 			
 			positions.add(new Vector2(xCord, yCord));

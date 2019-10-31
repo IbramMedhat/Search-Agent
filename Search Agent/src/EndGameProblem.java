@@ -16,11 +16,11 @@ public class EndGameProblem extends Problem  {
 		this.setOperators("UDLRCKS");
 		this.endGameGrid = new EndGameGrid(grid);
 		EndGameState initialState = new EndGameState();
+//		System.out.println(endGameGrid.getInitialIronManPos().x +","+ endGameGrid.getInitialIronManPos().y);
 		initialState.setIronManPosition(endGameGrid.getInitialIronManPos());
-		
 		this.setInitialState(initialState);
 		setVisitedStates(new EndGameVisitedStateList());
-		System.out.println("Initial State: "+this.getInitialState());
+//		System.out.println("Initial State: "+this.getInitialState());
 		
 	}
 
