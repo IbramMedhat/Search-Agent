@@ -33,7 +33,7 @@ public class EndGameGrid {
 		insertObjects(gridSplitted[4], EndGameCellType.WARRIOR);
 		insertObjects(gridSplitted[3], EndGameCellType.STONE);
 		insertObjects(gridSplitted[2], EndGameCellType.THANOS);
-		this.initialIronManPos = new Vector2(Integer.parseInt(gridSplitted[1].split(",")[0]),Integer.parseInt(gridSplitted[1].split(",")[0]));
+		this.initialIronManPos = new Vector2(Integer.parseInt(gridSplitted[1].split(",")[0]),Integer.parseInt(gridSplitted[1].split(",")[1]));
 		
 	}
 	

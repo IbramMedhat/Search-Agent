@@ -13,7 +13,7 @@ public class Main {
 //			System.out.println("");
 //		}
 		
-		System.out.println(solve("15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11,10,0", "DF", false));
+		System.out.println(solve("15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11,10,0", "A*1", false));
 		
 	}
 	
@@ -46,10 +46,10 @@ public class Main {
 			case "GR2":
 				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_GREEDY_HEURISTIC_TWO);break;
 			
-			case "A*1":
+			case "AS1":
 				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_A_HEURISTIC_ONE);break;
 			
-			case "A*2":
+			case "AS2":
 				goalNode = generalSearch(problem, QueueingFunction.ENQUEUE_A_HEURISTIC_TWO);break;
 			
 		}
@@ -192,7 +192,6 @@ public class Main {
 	public static void orderedInsertGreedyOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
-			//System.out.println(heuristicValue);
 			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
 		}
 	}
@@ -200,7 +199,6 @@ public class Main {
 	public static void orderedInsertGreedyTwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(2, nodeToBeInserted);
-			//System.out.println(heuristicValue);
 			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
 		}
 	}

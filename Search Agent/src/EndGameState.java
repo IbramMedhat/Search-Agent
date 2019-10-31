@@ -48,6 +48,7 @@ public class EndGameState extends State {
 		
 		state = (pos.x << 20 ) | state;
 		state = (pos.y << 16 ) | state;
+//		state = (pos.rawPosition() << 16 ) | state;
 	}
 	
 	public boolean areAllStoneCollected()
