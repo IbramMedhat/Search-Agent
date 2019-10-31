@@ -102,10 +102,6 @@ public class EndGameVisitedStateList extends VisitedStateList{
 		for (State state : searchList) {
 			if(state.getRawState() == x)
 			{
-				if(searchList.size() > 200)
-				{
-					System.out.println(searchList);
-				}
 				found = true;
 				break;
 			}
