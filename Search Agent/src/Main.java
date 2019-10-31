@@ -13,7 +13,7 @@ public class Main {
 //			System.out.println("");
 //		}
 		
-		System.out.println(solve("15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11,10,0", "BF", false));
+		System.out.println(solve("15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11,10,0", "DF", false));
 		
 	}
 	
