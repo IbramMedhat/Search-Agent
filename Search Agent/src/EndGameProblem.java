@@ -151,7 +151,8 @@ public class EndGameProblem extends Problem  {
 		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Down(), newEndGameState).getCellDamage();
 		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Left(), newEndGameState).getCellDamage();
 		totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos().Right(), newEndGameState).getCellDamage();
-		
+		if(operator != 'S')
+			totalDamage += endGameGrid.getGridCellContent(newEndGameState.getIronManPos(), newEndGameState).getCellDamage();
 		
 		switch(operator) {
 			case 'C' : totalDamage += 3;break; // Cost for collect infinity stone is 3
