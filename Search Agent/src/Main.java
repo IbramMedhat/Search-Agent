@@ -8,6 +8,11 @@ public class Main {
 	@SuppressWarnings("unused")
 	public static void main(String [] args)
 	{
+//		String[] st = {"BF","DF","UC","ID","GR1","GR2","AS1","AS2"};
+//		for (String string : st) {
+//			System.out.println(solve("15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11,10,0", string, false));
+//			System.out.println("");
+//		}
 		
 		String projectExampleGrid = "5,5;1,2;3,1;0,2,1,1,2,1,2,2,4,0,4,1;0,3,3,0,3,2,3,4,4,3";
 		String grid5 = "5,5;2,2;4,2;4,0,1,2,3,0,2,1,4,1,2,4;3,2,0,0,3,4,4,3,4,4";
@@ -28,7 +33,9 @@ public class Main {
 		System.out.println("");
 	}
 		
-//		System.out.println(solve(grid7, "BF", false));
+		
+		
+		System.out.println(solve("15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11,10,0", "UC", false));
 		
 	}
 	
@@ -92,7 +99,7 @@ public class Main {
 			toBeExpandedNodes = new NormalQueue<Node>();
 		}
 		else {			
-			toBeExpandedNodes = new PriorityQueueDT<Node>();
+			toBeExpandedNodes = new PriorityQueue<Node>();
 		}
 		
 		//Initialzie VisitedStates
@@ -165,19 +172,19 @@ public class Main {
 			enqueueAtFront((NormalQueue<Node>)toBeExpandedQueue, childrenNodes);
 			break;
 		case SORTED_INSERT:
-			orderedInsert((PriorityQueueDT<Node>)toBeExpandedQueue, childrenNodes);
+			orderedInsert((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes);
 			break;	
 		case ENQUEUE_GREEDY_HEURISTIC_ONE:
-			orderedInsertGreedyOne((PriorityQueueDT<Node>)toBeExpandedQueue, childrenNodes, problem);
+			orderedInsertGreedyOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 			break;
 		case ENQUEUE_GREEDY_HEURISTIC_TWO:
-			orderedInsertGreedyTwo((PriorityQueueDT<Node>)toBeExpandedQueue, childrenNodes, problem);
+			orderedInsertGreedyTwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 			break;
 		case ENQUEUE_A_HEURISTIC_ONE:
-			orderedInsertAOne((PriorityQueueDT<Node>)toBeExpandedQueue, childrenNodes, problem);
+			orderedInsertAOne((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 			break;
 		case ENQUEUE_A_HEURISTIC_TWO:
-			orderedInsertATwo((PriorityQueueDT<Node>)toBeExpandedQueue, childrenNodes, problem);
+			orderedInsertATwo((PriorityQueue<Node>)toBeExpandedQueue, childrenNodes, problem);
 			break;
 		default:
 			break;	
@@ -198,27 +205,27 @@ public class Main {
 		}
 	}
 	
-	public static void orderedInsert(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
+	public static void orderedInsert(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			toBeExpandedQueueDT.insertAt(nodeToBeInserted.getPathCost(), nodeToBeInserted);
 		}
 	}
 	
-	public static void orderedInsertGreedyOne(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
+	public static void orderedInsertGreedyOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
 			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
 		}
 	}
 	
-	public static void orderedInsertGreedyTwo(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
+	public static void orderedInsertGreedyTwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(2, nodeToBeInserted);
 			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
 		}
 	}
 	
-	public static void orderedInsertAOne(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
+	public static void orderedInsertAOne(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
 			//System.out.println(heuristicValue);
@@ -226,7 +233,7 @@ public class Main {
 		}
 	}
 	
-	public static void orderedInsertATwo(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
+	public static void orderedInsertATwo(PriorityQueue<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(2, nodeToBeInserted);
 			//System.out.println(heuristicValue);
