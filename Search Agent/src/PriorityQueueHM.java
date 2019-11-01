@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 
-public class PriorityQueue<E> implements Queue<E>{
+public class PriorityQueueHM<E> implements Queue<E>{
 	
 	LinkedList<LinkedList<E>> sortedQueue;
 	private int elementCount;
@@ -8,12 +8,12 @@ public class PriorityQueue<E> implements Queue<E>{
 	
 	private int numberOfQueues;
 	
-	public PriorityQueue()
+	public PriorityQueueHM()
 	{
 		this(250);
 	}
 	
-	public PriorityQueue(int numOfQueues)
+	public PriorityQueueHM(int numOfQueues)
 	{
 		this.numberOfQueues = numOfQueues;
 		sortedQueue = new LinkedList<LinkedList<E>>();
