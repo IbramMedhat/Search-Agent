@@ -24,7 +24,7 @@ public class Main {
 
 		String[] st = {"BF","DF","UC","ID","GR1","GR2","AS1","AS2"};
 		for (String string : st) {
-		System.out.println(solve(grid7, string, false));
+			System.out.println(solve(grid7, string, false));
 		System.out.println("");
 	}
 		
