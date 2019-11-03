@@ -231,7 +231,6 @@ public class Main {
 	public static void orderedInsertAOne(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
-			//System.out.println(heuristicValue);
 			nodeToBeInserted.setQueuingCost(heuristicValue + nodeToBeInserted.getPathCost());
 			toBeExpandedQueueDT.add(nodeToBeInserted);
 		}
@@ -240,7 +239,6 @@ public class Main {
 	public static void orderedInsertATwo(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(2, nodeToBeInserted);
-			//System.out.println(heuristicValue);
 			nodeToBeInserted.setQueuingCost(heuristicValue + nodeToBeInserted.getPathCost());
 			toBeExpandedQueueDT.add(nodeToBeInserted);
 		}
