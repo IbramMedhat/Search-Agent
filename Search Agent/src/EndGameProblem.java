@@ -148,7 +148,7 @@ public class EndGameProblem extends Problem  {
 	@Override
 	public int calculateHeuristic(int functionIndex, Node currentNode) {
 		switch(functionIndex) {
-			case 1 : return cityBlockDistanceFromThanos(currentNode);
+			case 1 : return stonesRemainingAndWarriorsHeuristic(currentNode);
 			case 2 : return stonesRemainingHeuristic(currentNode);
 			default : return 0;
 		}
@@ -162,10 +162,29 @@ public class EndGameProblem extends Problem  {
 		
 	}
 	
+	private int stonesRemainingAndWarriorsHeuristic(Node currentNode) {
+		int estimatedRemainingCost;
+		int collectedStones = ((EndGameState)currentNode.getCurrentState()).CollectedStonesCount();
+		int killedWarriors = ((EndGameState)currentNode.getCurrentState()).KilledWarriorsCount();
+		
+		
+		//if the number of warriors exceeds 5 or we have already collected all the stones, we ignore the effect 
+		//don't calculate the warriors in our heuristic.
+		if(killedWarriors > 5 || collectedStones > 5)
+			killedWarriors = 5;
+		
+		int totalCostOfCollectStones = 18 + 5;
+		estimatedRemainingCost = totalCostOfCollectStones - (3 * collectedStones + killedWarriors);
+
+		
+		return estimatedRemainingCost;
+		
+	}
+	
 	@SuppressWarnings("unused")
 	private int warriorsRemainingHeurisitic(Node currentNode) {
 		int killedWarriors = ((EndGameState)currentNode.getCurrentState()).KilledWarriorsCount();
-		int totalCostOfKilledWarriors = 8;
+		int totalCostOfKilledWarriors = 10;
 		int estimatedRemainingCost = totalCostOfKilledWarriors - 2 * killedWarriors;
 		return estimatedRemainingCost > 0? estimatedRemainingCost : 0;
 	}

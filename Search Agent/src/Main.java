@@ -32,7 +32,7 @@ public class Main {
 				"AS2"
 				};
 		for (String string : st) {
-			System.out.println(solve(grid10, string, false));
+			System.out.println(solve(grid5, string, false));
 		System.out.println("");
 		
 		}		

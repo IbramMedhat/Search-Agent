@@ -43,4 +43,8 @@ public class Vector2 {
 	public String toString() {
 	    return "("+this.x+","+this.y+")";
 	}
+
+	public boolean equals(Vector2 input){
+		return (input.x == this.x && input.y == this.y);
+	}
 }
