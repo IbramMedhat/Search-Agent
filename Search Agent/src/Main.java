@@ -23,7 +23,7 @@ public class Main {
 
 		String[] st = {"BF","DF","UC","ID","GR1","GR2","AS1","AS2"};
 		for (String string : st) {
-			System.out.println(solve(projectExampleGrid, string, false));
+			System.out.println(solve(grid10, string, false));
 		System.out.println("");
 		
 		}
@@ -115,7 +115,7 @@ public class Main {
 		// Checking if the node is not goal state node we continue checking and expanding
 		while(currentNode != null && !problem.goalTest(currentNode.getCurrentState())) {
 			// if iterative deepening we check on the depth limit
-			if(currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT) {
+			if((currentNode.getDepth() < depthLimit || queueingFunction != QueueingFunction.ENQUEUE_AT_FRONT_WITH_LIMIT)) {
 				expand(toBeExpandedNodes, currentNode, problem, queueingFunction);
 			}
 			if(!toBeExpandedNodes.isEmpty()) {
@@ -141,7 +141,9 @@ public class Main {
 			// Repeated states are handled in the transition function
 			State nextState = problem.transitionFunction(currentNode.getCurrentState(), operator);
 			
-			if(nextState != null)
+			// If the current node has a cost of 100 or more iron man can't win so we don't expand
+			// If the state is repeated the transition function will return null
+			if(nextState != null && currentNode.getPathCost() < 100)
 			{
 				// Adding the expanded nodes according to the transition function and path cost function
 				problem.expandedNodes++;	
