@@ -40,7 +40,7 @@ public class EndGameGrid {
 	//Helper function to insert the objects in their places in the grid, according to the string input
 	private void insertObjects(String posString, EndGameCellType object)
 	{
-		int stringLength = posString.length();
+		// int stringLength = posString.length();
 		ArrayList<Vector2> positions = new ArrayList<Vector2>();
 		int index = 0;
 		
@@ -193,8 +193,7 @@ public class EndGameGrid {
 		}
 
 	}
-	
-		
+			
 	
 //	public ArrayList<Vector2> getRemaingWarriorsPos() {
 //		return remaingWarriorsPos;
@@ -254,6 +253,33 @@ public class EndGameGrid {
 		System.out.println(grid.doesCellContain(new Vector2(-1, 3),EndGameCellType.WARRIOR, state));
 		System.out.println(grid.isCellEmpty(new Vector2(-1, 3), state));
 
+	}
+	
+	//Returns a string visualizing the Grid according to the given state 
+	public String Visualize(State currentState) {
+		String out = "";
+		EndGameState currentEndGameState = (EndGameState)currentState;
+		
+		Vector2 ironManpos = currentEndGameState.getIronManPos();
+		EndGameCell ironManCell = new EndGameCell();
+		ironManCell.setCellContent(gridCells[ironManpos.x][ironManpos.y].getContent(), gridCells[ironManpos.x][ironManpos.y].getContentIndex());
+		this.gridCells[ironManpos.x][ironManpos.y].setCellContent(EndGameCellType.IRONMAN, 0);
+		
+		for (int i = 0; i < gridCells.length; i++)
+		{
+			for (int j = 0; j < gridCells[i].length; j++)
+			{
+				if(j == 0)
+					out += ("| ");
+				EndGameCellType cellContent = getGridCellContent(i,j ,currentEndGameState );
+				if(isCellEmpty(i, j, currentEndGameState) || doesCellContain(i, j, cellContent, currentEndGameState)) {					
+					out += (cellContent.getCellChar()+" | ");
+				}
+			}
+			out += "\n";		
+		}
+		this.gridCells[ironManpos.x][ironManpos.y] = ironManCell;
+		return out;
 	}
 	
 	

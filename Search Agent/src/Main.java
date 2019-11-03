@@ -24,9 +24,11 @@ public class Main {
 
 		String[] st = {"BF","DF","UC","ID","GR1","GR2","AS1","AS2"};
 		for (String string : st) {
-			System.out.println(solve(grid7, string, false));
+//			System.out.println(solve(grid7, string, false));
 		System.out.println("");
-	}
+		
+		}
+		System.out.println(solve(grid15, "BF", false));
 		
 		
 	}
@@ -78,7 +80,7 @@ public class Main {
 			return "There is no solution";
 		else {
 			// printing the needed operators leading to goal state; the path cost; the number of expanded nodes
-			return ComputeOutput(goalNode);
+			return ComputeOutput(goalNode, problem, visualize);
 		}
 	}
 	public static Node generalSearch(Problem problem, QueueingFunction queueingFunction) {
@@ -233,11 +235,13 @@ public class Main {
 	}
 			
 	// Computing the cost of goal node and the operators leading to it	
-	public static String ComputeOutput(Node goalNode)
+	public static String ComputeOutput(Node goalNode, Problem problem, boolean visualize)
 	{
 		Node currentNode = goalNode;
 		String operators = "";
 		String states = "";
+		String visualization = "";
+		
 		int pathCost = goalNode.getPathCost();
 		while(currentNode != null) {
 			String operator = "";
@@ -273,10 +277,14 @@ public class Main {
 			else {
 				operators = ","+operator+operators;
 			}
+			if(visualize)
+			{
+				visualization = "Operator: "+operator+"\n"+problem.Visualize(currentNode.getCurrentState())+"\n \n" + visualization;
+			}
 			states = currentNode.getCurrentState()+"\n"+states;
 			currentNode = currentNode.getParentNode();
 		}
-		return operators+";"+pathCost+";"+expandedNodes;
+		return operators+";"+pathCost+";"+expandedNodes+"\n"+visualization;
 	}
 	
 }

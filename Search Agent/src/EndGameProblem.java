@@ -206,4 +206,11 @@ public class EndGameProblem extends Problem  {
 		return deltaX < deltaY ? deltaX : deltaY;
 	}
 
+	@Override
+	protected String Visualize(State currentState) {
+		String visualization = "";
+		visualization = this.endGameGrid.Visualize(currentState);
+		return visualization;
+	}
+
 }

@@ -33,10 +33,13 @@ public abstract class Problem {
 	public VisitedStateList getVisitedStates() {
 		return visitedStates;
 	}
-
+	
 	public void setVisitedStates(VisitedStateList visitedStates) {
 		this.visitedStates = visitedStates;
 	}
+	
+	//Returns a string of a visualization of the current state, must be implemented according your problem.
+	protected abstract String Visualize(State currentState);
 	
 	
 	
