@@ -16,7 +16,7 @@ public class EndGameState extends State {
 	}
 	
 	
-	
+	//Wehther IronMan Snapped Or not
 	public boolean isSnapped()
 	{
 		return (state >> 30) > 0 ? true : false;
@@ -27,6 +27,7 @@ public class EndGameState extends State {
 		state = state | (1<<30); 
 	}
 
+	//return the current position of iron man
 	public Vector2 getIronManPos() {
 		
 		byte x = (byte) ((state & 0x00F00000)>>20);
