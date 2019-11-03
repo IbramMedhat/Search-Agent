@@ -24,11 +24,11 @@ public class Main {
 
 		String[] st = {"BF","DF","UC","ID","GR1","GR2","AS1","AS2"};
 		for (String string : st) {
-//			System.out.println(solve(grid7, string, false));
+			System.out.println(solve(projectExampleGrid, string, false));
 		System.out.println("");
 		
 		}
-		System.out.println(solve(grid15, "BF", false));
+//		System.out.println(solve(projectExampleGrid, "AS1", false));
 		
 		
 	}

@@ -1,6 +1,21 @@
-public abstract class VisitedStateList {
+import java.util.HashMap;
 
-	public abstract boolean isStateRepeated(State state);
+public class VisitedStateList {
+
+	private HashMap<Integer, State> map;
 	
-	public abstract void InitializeList();
+	public boolean isStateRepeated(State state) {
+		if(map.containsKey(state.getRawState())) {
+			return true;
+		}
+		else
+		{
+			map.put(state.getRawState(), state);
+			return false;
+		}
+	}
+	
+	public void InitializeList() {
+		map = new HashMap<Integer, State>();
+	}
 }

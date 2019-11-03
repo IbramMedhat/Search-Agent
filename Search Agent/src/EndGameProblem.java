@@ -19,7 +19,7 @@ public class EndGameProblem extends Problem  {
 //		System.out.println(endGameGrid.getInitialIronManPos().x +","+ endGameGrid.getInitialIronManPos().y);
 		initialState.setIronManPosition(endGameGrid.getInitialIronManPos());
 		this.setInitialState(initialState);
-		setVisitedStates(new EndGameVisitedStateList());
+		setVisitedStates(new VisitedStateList());
 //		System.out.println("Initial State: "+this.getInitialState());
 		
 	}
