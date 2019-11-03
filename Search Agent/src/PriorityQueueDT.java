@@ -11,7 +11,7 @@ public class PriorityQueueDT<E> implements Queue<E>{
 
 			@Override
 			public int compare(Node o1, Node o2) {
-				return o1.getPathCost() - o2.getPathCost();
+				return o1.getQueuingCost() - o2.getQueuingCost();
 			}
 			
 		};
@@ -28,15 +28,11 @@ public class PriorityQueueDT<E> implements Queue<E>{
 		return sortedQueue.isEmpty();
 	}
 	
-	public boolean insertAt(int i, Node e)
+	public boolean add(Node e)
 	{
 		return sortedQueue.add((Node) e);
 	}
 	
-	public int nodeComparertor(Node n1, Node n2) {
-		return n1.getPathCost() - n2.getPathCost();
-	}
-
 	@Override
 	public Object removeFirst() {
 		

@@ -4,6 +4,7 @@ public abstract class Problem {
 	private State initialState;
 	
 	private VisitedStateList visitedStates;
+	public int expandedNodes;
 	
 	public abstract State transitionFunction(State currentState, char operator);
 	

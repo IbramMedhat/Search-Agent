@@ -3,7 +3,6 @@ import java.util.ArrayList;
 public class Main {
 		
 	public static int lastPrint = 0;
-	public static int expandedNodes = 0;
 	
 	@SuppressWarnings("unused")
 	public static void main(String [] args)
@@ -145,7 +144,7 @@ public class Main {
 			if(nextState != null)
 			{
 				// Adding the expanded nodes according to the transition function and path cost function
-				expandedNodes++;	
+				problem.expandedNodes++;	
 				childrenNodes.add(new Node(nextState, 
 												currentNode, 
 												operator,
@@ -200,21 +199,23 @@ public class Main {
 	
 	public static void orderedInsert(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes) {
 		for (Node nodeToBeInserted : childrenNodes) {
-			toBeExpandedQueueDT.insertAt(nodeToBeInserted.getPathCost(), nodeToBeInserted);
+			toBeExpandedQueueDT.add(nodeToBeInserted);
 		}
 	}
 	
 	public static void orderedInsertGreedyOne(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
-			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
+			nodeToBeInserted.setQueuingCost(heuristicValue);
+			toBeExpandedQueueDT.add(nodeToBeInserted);
 		}
 	}
 	
 	public static void orderedInsertGreedyTwo(PriorityQueueDT<Node> toBeExpandedQueueDT, ArrayList<Node> childrenNodes, Problem problem) {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(2, nodeToBeInserted);
-			toBeExpandedQueueDT.insertAt(heuristicValue, nodeToBeInserted);
+			nodeToBeInserted.setQueuingCost(heuristicValue);
+			toBeExpandedQueueDT.add(nodeToBeInserted);
 		}
 	}
 	
@@ -222,7 +223,8 @@ public class Main {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(1, nodeToBeInserted);
 			//System.out.println(heuristicValue);
-			toBeExpandedQueueDT.insertAt(heuristicValue + nodeToBeInserted.getPathCost(), nodeToBeInserted);
+			nodeToBeInserted.setQueuingCost(heuristicValue + nodeToBeInserted.getPathCost());
+			toBeExpandedQueueDT.add(nodeToBeInserted);
 		}
 	}
 	
@@ -230,7 +232,8 @@ public class Main {
 		for (Node nodeToBeInserted : childrenNodes) {
 			int heuristicValue = problem.calculateHeuristic(2, nodeToBeInserted);
 			//System.out.println(heuristicValue);
-			toBeExpandedQueueDT.insertAt(heuristicValue + nodeToBeInserted.getPathCost(), nodeToBeInserted);
+			nodeToBeInserted.setQueuingCost(heuristicValue + nodeToBeInserted.getPathCost());
+			toBeExpandedQueueDT.add(nodeToBeInserted);
 		}
 	}
 			
@@ -284,7 +287,7 @@ public class Main {
 			states = currentNode.getCurrentState()+"\n"+states;
 			currentNode = currentNode.getParentNode();
 		}
-		return operators+";"+pathCost+";"+expandedNodes+"\n"+visualization;
+		return operators+";"+pathCost+";"+problem.expandedNodes+"\n"+visualization;
 	}
 	
 }

@@ -6,6 +6,7 @@ public class Node {
 	private char operator;
 	private int depth;
 	private int pathCost;
+	private int queuingCost;
 	
 	public Node(State currentState, Node parentNode, char operator, int depth, int pathCost) {
 		super();
@@ -14,6 +15,7 @@ public class Node {
 		this.operator = operator;
 		this.depth = depth;
 		this.pathCost = pathCost;
+		this.queuingCost = pathCost;
 	}
 	
 	public State getCurrentState() {
@@ -31,5 +33,12 @@ public class Node {
 	public int getPathCost() {
 		return pathCost;
 	}
+	public int getQueuingCost() {
+		return queuingCost;
+	}
+	public void setQueuingCost(int queuingCost) {
+		this.queuingCost = queuingCost;
+	}
+	
 	
 }
