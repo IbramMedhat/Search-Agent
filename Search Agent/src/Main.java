@@ -21,14 +21,21 @@ public class Main {
 		String grid14 = "14,14;2,13;12,7;8,6,9,4,7,1,4,4,4,7,2,3;8,13,0,4,0,8,5,7,10,0";
 		String grid15 = "15,15;12,13;5,7;7,0,9,14,14,8,5,8,8,9,8,4;6,6,4,3,10,2,7,4,3,11";
 
-		String[] st = {"BF","DF","UC","ID","GR1","GR2","AS1","AS2"};
+		String[] st = {
+//				"BF",
+//				"DF",
+				"UC",
+//				"ID",
+//				"GR1",
+//				"GR2",
+				"AS1",
+				"AS2"
+				};
 		for (String string : st) {
 			System.out.println(solve(grid10, string, false));
 		System.out.println("");
 		
-		}
-//		System.out.println(solve(projectExampleGrid, "AS1", false));
-		
+		}		
 		
 	}
 	
