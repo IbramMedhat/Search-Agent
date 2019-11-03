@@ -39,7 +39,7 @@ public abstract class Problem {
 		this.visitedStates = visitedStates;
 	}
 	
-	//Returns a string of a visualization of the current state, must be implemented according your problem.
+	//Returns a string of a visualization of the current state, must be implemented according to your problem.
 	protected abstract String Visualize(State currentState);
 	
 	

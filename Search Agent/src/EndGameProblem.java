@@ -16,11 +16,9 @@ public class EndGameProblem extends Problem  {
 		this.setOperators("UDLRCKS");
 		this.endGameGrid = new EndGameGrid(grid);
 		EndGameState initialState = new EndGameState();
-//		System.out.println(endGameGrid.getInitialIronManPos().x +","+ endGameGrid.getInitialIronManPos().y);
 		initialState.setIronManPosition(endGameGrid.getInitialIronManPos());
 		this.setInitialState(initialState);
 		setVisitedStates(new VisitedStateList());
-//		System.out.println("Initial State: "+this.getInitialState());
 		
 	}
 
@@ -86,13 +84,7 @@ public class EndGameProblem extends Problem  {
 				}
 				break;
 			case 'S' : 
-//				boolean allCollected = true;
-//				for(int i = 0; i < stonesCollected.length; i++) {
-//					if(!stonesCollected[i]) {
-//						allCollected = false;
-//						break;
-//					}
-//				}
+
 				if(currentEndState.areAllStoneCollected()) {
 					// Checking if all stones are collected and Thanos is in the same cell as ironman
 					if(endGameGrid.doesCellContain(currentIronManPos, EndGameCellType.THANOS, currentEndState))
@@ -108,26 +100,7 @@ public class EndGameProblem extends Problem  {
 			return null;
 	}
 	
-//	private boolean nextCellFree(int intendedPositionX, int intendedPositionY, boolean[] killedWarriors) {
-//		boolean warriorFound = false;
-//		boolean thanosFound = false;
-//		
-//		// Check if warrior is in the target cell of the operator
-//		for(int i = 0; i < warriorsPositions.length(); i+=2) {
-//			if(intendedPositionX == Character.getNumericValue(warriorsPositions.charAt(i))
-//			&& intendedPositionY == Character.getNumericValue(warriorsPositions.charAt (i + 1))
-//			&& !killedWarriors[i / 2]) {
-//				return false;
-//			}
-//		}
-//		
-//		// Check if thanos is in the target cell of the operator
-//		if(intendedPositionX == Character.getNumericValue(thanosPosition.charAt(0))
-//		&& intendedPositionY == Character.getNumericValue(thanosPosition.charAt(1)))
-//			return false;
-//	
-//		return true;
-//	}
+
 
 	@Override
 	public boolean goalTest(State currentState) {
